@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package godesk;
+option go_package = "./;godesk";
+
+message ChannelRequest {
+  // 客户端唯一标识
+  string client_uuid = 1;
+  // 数据类型
+  string key = 2;
+  // 数据
+  bytes data = 3;
+}
+
+
+service ChannelService {
+  rpc DataStream(stream ChannelRequest) returns (stream ChannelRequest) {}
+}
