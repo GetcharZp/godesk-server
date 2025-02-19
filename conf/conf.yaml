@@ -1,5 +1,0 @@
-app:
-  name: godesk-server
-  port: :9620
-  log_path: /var/log/godesk/godesk.log
-

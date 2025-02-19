@@ -2,3 +2,5 @@
 .vscode/
 .DS_Store
 log/
+
+conf/conf.yaml
