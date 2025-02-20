@@ -16,7 +16,7 @@ func NewGormDB() {
 	if err != nil {
 		panic(err)
 	}
-	err = db.AutoMigrate()
+	err = db.AutoMigrate(&DeviceBasic{}, &UserBasic{}, &UserDevice{})
 	if err != nil {
 		panic(err)
 	}
@@ -28,5 +28,6 @@ func NewGormDB() {
 	sqlDB.SetMaxOpenConns(130)
 	sqlDB.SetConnMaxLifetime(time.Hour)
 	DB = db
+	initTable()
 	initData()
 }
