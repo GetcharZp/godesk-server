@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package godesk;
+option go_package = "./;godesk";
+
+message DeviceInfoRequest {
+  // 设备唯一标识
+  string uuid = 1;
+}
+
+message DeviceInfoResponse {
+  // 设备唯一标识
+  string uuid = 1;
+  // 设备码
+  uint64 code = 2;
+  // 操作系统, win, mac, linux
+  string os = 3;
+}
+
+message CreateDeviceRequest {
+  // 操作系统
+  string os = 1;
+}
+
+service DeviceService {
+  // 获取设备信息
+  rpc GetDeviceInfo(DeviceInfoRequest) returns (DeviceInfoResponse) {}
+  // 创建设备
+  rpc CreateDevice(CreateDeviceRequest) returns (DeviceInfoResponse) {}
+}

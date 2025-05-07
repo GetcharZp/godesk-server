@@ -3,6 +3,7 @@ package models
 type UserDevice struct {
 	Id              uint64 `gorm:"primaryKey" json:"id"`                                               // ID
 	UserId          uint64 `gorm:"column:user_id; index:idx_user_id" json:"user_id"`                   // 用户ID
+	DeviceId        uint64 `gorm:"column:device_id" json:"device_id"`                                  // 设备ID
 	DeviceCode      uint64 `gorm:"column:device_code" json:"device_code"`                              // 设备码
 	ConnectPassword string `gorm:"column:connect_password; type:varchar(255)" json:"connect_password"` // 连接密码
 	Remark          string `gorm:"type:varchar(255)" json:"remark"`                                    // 备注
