@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package godesk;
+option go_package = "./;godesk";
+
+message EmptyRequest {}
+
+message EmptyResponse {}

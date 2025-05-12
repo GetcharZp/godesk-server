@@ -2,8 +2,10 @@ package internal
 
 import (
 	"fmt"
+	"github.com/getcharzp/godesk-serve/internal/middleware"
 	"github.com/getcharzp/godesk-serve/internal/services/channel"
 	"github.com/getcharzp/godesk-serve/internal/services/device"
+	"github.com/getcharzp/godesk-serve/internal/services/user"
 	"github.com/getcharzp/godesk-serve/logger"
 	pb "github.com/getcharzp/godesk-serve/proto"
 	"github.com/spf13/viper"
@@ -17,8 +19,11 @@ func NewRpcServer() {
 		panic(err)
 	}
 
-	s := grpc.NewServer()
+	s := grpc.NewServer(
+		grpc.UnaryInterceptor(middleware.UserAuth),
+	)
 	pb.RegisterChannelServiceServer(s, &channel.Service{})
+	pb.RegisterUserServiceServer(s, &user.Service{})
 	pb.RegisterDeviceServiceServer(s, &device.Service{})
 
 	logger.Info(fmt.Sprintf("[sys] %s start successfully, port: %s",

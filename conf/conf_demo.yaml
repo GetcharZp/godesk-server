@@ -3,4 +3,5 @@ app:
   port: :9620
   log_path: /var/log/godesk/godesk.log
   dsn: host=localhost user=gorm password=gorm dbname=gorm port=9920 sslmode=disable TimeZone=Asia/Shanghai
+  jwt_key: godesk-server
 
