@@ -72,7 +72,7 @@ type DeviceInfoResponse struct {
 	Uuid string `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
 	// 设备码
 	Code uint64 `protobuf:"varint,2,opt,name=code,proto3" json:"code,omitempty"`
-	// 操作系统, win, mac, linux
+	// 操作系统, windows, darwin, linux
 	Os            string `protobuf:"bytes,3,opt,name=os,proto3" json:"os,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -174,11 +174,370 @@ func (x *CreateDeviceRequest) GetOs() string {
 	return ""
 }
 
+type DeviceListRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 基础请求
+	Base          *BaseRequest `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeviceListRequest) Reset() {
+	*x = DeviceListRequest{}
+	mi := &file_device_basic_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeviceListRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeviceListRequest) ProtoMessage() {}
+
+func (x *DeviceListRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_device_basic_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeviceListRequest.ProtoReflect.Descriptor instead.
+func (*DeviceListRequest) Descriptor() ([]byte, []int) {
+	return file_device_basic_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *DeviceListRequest) GetBase() *BaseRequest {
+	if x != nil {
+		return x.Base
+	}
+	return nil
+}
+
+type DeviceListItem struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 记录唯一标识
+	Uuid string `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	// 设备码
+	Code uint64 `protobuf:"varint,2,opt,name=code,proto3" json:"code,omitempty"`
+	// 备注
+	Remark string `protobuf:"bytes,3,opt,name=remark,proto3" json:"remark,omitempty"`
+	// 操作系统, windows, darwin, linux
+	Os string `protobuf:"bytes,4,opt,name=os,proto3" json:"os,omitempty"`
+	// 设备密码
+	Password      string `protobuf:"bytes,5,opt,name=password,proto3" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeviceListItem) Reset() {
+	*x = DeviceListItem{}
+	mi := &file_device_basic_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeviceListItem) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeviceListItem) ProtoMessage() {}
+
+func (x *DeviceListItem) ProtoReflect() protoreflect.Message {
+	mi := &file_device_basic_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeviceListItem.ProtoReflect.Descriptor instead.
+func (*DeviceListItem) Descriptor() ([]byte, []int) {
+	return file_device_basic_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *DeviceListItem) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
+}
+
+func (x *DeviceListItem) GetCode() uint64 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *DeviceListItem) GetRemark() string {
+	if x != nil {
+		return x.Remark
+	}
+	return ""
+}
+
+func (x *DeviceListItem) GetOs() string {
+	if x != nil {
+		return x.Os
+	}
+	return ""
+}
+
+func (x *DeviceListItem) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+type DeviceListResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Count         int64                  `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
+	List          []*DeviceListItem      `protobuf:"bytes,2,rep,name=list,proto3" json:"list,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeviceListResponse) Reset() {
+	*x = DeviceListResponse{}
+	mi := &file_device_basic_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeviceListResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeviceListResponse) ProtoMessage() {}
+
+func (x *DeviceListResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_device_basic_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeviceListResponse.ProtoReflect.Descriptor instead.
+func (*DeviceListResponse) Descriptor() ([]byte, []int) {
+	return file_device_basic_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DeviceListResponse) GetCount() int64 {
+	if x != nil {
+		return x.Count
+	}
+	return 0
+}
+
+func (x *DeviceListResponse) GetList() []*DeviceListItem {
+	if x != nil {
+		return x.List
+	}
+	return nil
+}
+
+type AddDeviceRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 设备码
+	Code uint64 `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	// 设备密码
+	Password string `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	// 设备备注
+	Remark        string `protobuf:"bytes,3,opt,name=remark,proto3" json:"remark,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddDeviceRequest) Reset() {
+	*x = AddDeviceRequest{}
+	mi := &file_device_basic_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddDeviceRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddDeviceRequest) ProtoMessage() {}
+
+func (x *AddDeviceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_device_basic_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddDeviceRequest.ProtoReflect.Descriptor instead.
+func (*AddDeviceRequest) Descriptor() ([]byte, []int) {
+	return file_device_basic_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *AddDeviceRequest) GetCode() uint64 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *AddDeviceRequest) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+func (x *AddDeviceRequest) GetRemark() string {
+	if x != nil {
+		return x.Remark
+	}
+	return ""
+}
+
+type EditDeviceRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 记录唯一标识
+	Uuid string `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	// 设备码
+	Code uint64 `protobuf:"varint,2,opt,name=code,proto3" json:"code,omitempty"`
+	// 设备密码
+	Password string `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	// 设备备注
+	Remark        string `protobuf:"bytes,4,opt,name=remark,proto3" json:"remark,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EditDeviceRequest) Reset() {
+	*x = EditDeviceRequest{}
+	mi := &file_device_basic_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EditDeviceRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EditDeviceRequest) ProtoMessage() {}
+
+func (x *EditDeviceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_device_basic_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EditDeviceRequest.ProtoReflect.Descriptor instead.
+func (*EditDeviceRequest) Descriptor() ([]byte, []int) {
+	return file_device_basic_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *EditDeviceRequest) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
+}
+
+func (x *EditDeviceRequest) GetCode() uint64 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *EditDeviceRequest) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+func (x *EditDeviceRequest) GetRemark() string {
+	if x != nil {
+		return x.Remark
+	}
+	return ""
+}
+
+type DeleteDeviceRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 记录唯一标识
+	Uuid          string `protobuf:"bytes,1,opt,name=uuid,proto3" json:"uuid,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteDeviceRequest) Reset() {
+	*x = DeleteDeviceRequest{}
+	mi := &file_device_basic_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteDeviceRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteDeviceRequest) ProtoMessage() {}
+
+func (x *DeleteDeviceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_device_basic_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteDeviceRequest.ProtoReflect.Descriptor instead.
+func (*DeleteDeviceRequest) Descriptor() ([]byte, []int) {
+	return file_device_basic_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *DeleteDeviceRequest) GetUuid() string {
+	if x != nil {
+		return x.Uuid
+	}
+	return ""
+}
+
 var File_device_basic_proto protoreflect.FileDescriptor
 
 const file_device_basic_proto_rawDesc = "" +
 	"\n" +
-	"\x12device_basic.proto\x12\x06godesk\"'\n" +
+	"\x12device_basic.proto\x12\x06godesk\x1a\n" +
+	"base.proto\"'\n" +
 	"\x11DeviceInfoRequest\x12\x12\n" +
 	"\x04uuid\x18\x01 \x01(\tR\x04uuid\"L\n" +
 	"\x12DeviceInfoResponse\x12\x12\n" +
@@ -186,10 +545,37 @@ const file_device_basic_proto_rawDesc = "" +
 	"\x04code\x18\x02 \x01(\x04R\x04code\x12\x0e\n" +
 	"\x02os\x18\x03 \x01(\tR\x02os\"%\n" +
 	"\x13CreateDeviceRequest\x12\x0e\n" +
-	"\x02os\x18\x01 \x01(\tR\x02os2\xa4\x01\n" +
+	"\x02os\x18\x01 \x01(\tR\x02os\"<\n" +
+	"\x11DeviceListRequest\x12'\n" +
+	"\x04base\x18\x01 \x01(\v2\x13.godesk.BaseRequestR\x04base\"|\n" +
+	"\x0eDeviceListItem\x12\x12\n" +
+	"\x04uuid\x18\x01 \x01(\tR\x04uuid\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\x04R\x04code\x12\x16\n" +
+	"\x06remark\x18\x03 \x01(\tR\x06remark\x12\x0e\n" +
+	"\x02os\x18\x04 \x01(\tR\x02os\x12\x1a\n" +
+	"\bpassword\x18\x05 \x01(\tR\bpassword\"V\n" +
+	"\x12DeviceListResponse\x12\x14\n" +
+	"\x05count\x18\x01 \x01(\x03R\x05count\x12*\n" +
+	"\x04list\x18\x02 \x03(\v2\x16.godesk.DeviceListItemR\x04list\"Z\n" +
+	"\x10AddDeviceRequest\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x04R\x04code\x12\x1a\n" +
+	"\bpassword\x18\x02 \x01(\tR\bpassword\x12\x16\n" +
+	"\x06remark\x18\x03 \x01(\tR\x06remark\"o\n" +
+	"\x11EditDeviceRequest\x12\x12\n" +
+	"\x04uuid\x18\x01 \x01(\tR\x04uuid\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\x04R\x04code\x12\x1a\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\x12\x16\n" +
+	"\x06remark\x18\x04 \x01(\tR\x06remark\")\n" +
+	"\x13DeleteDeviceRequest\x12\x12\n" +
+	"\x04uuid\x18\x01 \x01(\tR\x04uuid2\xb6\x03\n" +
 	"\rDeviceService\x12H\n" +
 	"\rGetDeviceInfo\x12\x19.godesk.DeviceInfoRequest\x1a\x1a.godesk.DeviceInfoResponse\"\x00\x12I\n" +
-	"\fCreateDevice\x12\x1b.godesk.CreateDeviceRequest\x1a\x1a.godesk.DeviceInfoResponse\"\x00B\vZ\t./;godeskb\x06proto3"
+	"\fCreateDevice\x12\x1b.godesk.CreateDeviceRequest\x1a\x1a.godesk.DeviceInfoResponse\"\x00\x12H\n" +
+	"\rGetDeviceList\x12\x19.godesk.DeviceListRequest\x1a\x1a.godesk.DeviceListResponse\"\x00\x12>\n" +
+	"\tAddDevice\x12\x18.godesk.AddDeviceRequest\x1a\x15.godesk.EmptyResponse\"\x00\x12@\n" +
+	"\n" +
+	"EditDevice\x12\x19.godesk.EditDeviceRequest\x1a\x15.godesk.EmptyResponse\"\x00\x12D\n" +
+	"\fDeleteDevice\x12\x1b.godesk.DeleteDeviceRequest\x1a\x15.godesk.EmptyResponse\"\x00B\vZ\t./;godeskb\x06proto3"
 
 var (
 	file_device_basic_proto_rawDescOnce sync.Once
@@ -203,22 +589,40 @@ func file_device_basic_proto_rawDescGZIP() []byte {
 	return file_device_basic_proto_rawDescData
 }
 
-var file_device_basic_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_device_basic_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_device_basic_proto_goTypes = []any{
 	(*DeviceInfoRequest)(nil),   // 0: godesk.DeviceInfoRequest
 	(*DeviceInfoResponse)(nil),  // 1: godesk.DeviceInfoResponse
 	(*CreateDeviceRequest)(nil), // 2: godesk.CreateDeviceRequest
+	(*DeviceListRequest)(nil),   // 3: godesk.DeviceListRequest
+	(*DeviceListItem)(nil),      // 4: godesk.DeviceListItem
+	(*DeviceListResponse)(nil),  // 5: godesk.DeviceListResponse
+	(*AddDeviceRequest)(nil),    // 6: godesk.AddDeviceRequest
+	(*EditDeviceRequest)(nil),   // 7: godesk.EditDeviceRequest
+	(*DeleteDeviceRequest)(nil), // 8: godesk.DeleteDeviceRequest
+	(*BaseRequest)(nil),         // 9: godesk.BaseRequest
+	(*EmptyResponse)(nil),       // 10: godesk.EmptyResponse
 }
 var file_device_basic_proto_depIdxs = []int32{
-	0, // 0: godesk.DeviceService.GetDeviceInfo:input_type -> godesk.DeviceInfoRequest
-	2, // 1: godesk.DeviceService.CreateDevice:input_type -> godesk.CreateDeviceRequest
-	1, // 2: godesk.DeviceService.GetDeviceInfo:output_type -> godesk.DeviceInfoResponse
-	1, // 3: godesk.DeviceService.CreateDevice:output_type -> godesk.DeviceInfoResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	9,  // 0: godesk.DeviceListRequest.base:type_name -> godesk.BaseRequest
+	4,  // 1: godesk.DeviceListResponse.list:type_name -> godesk.DeviceListItem
+	0,  // 2: godesk.DeviceService.GetDeviceInfo:input_type -> godesk.DeviceInfoRequest
+	2,  // 3: godesk.DeviceService.CreateDevice:input_type -> godesk.CreateDeviceRequest
+	3,  // 4: godesk.DeviceService.GetDeviceList:input_type -> godesk.DeviceListRequest
+	6,  // 5: godesk.DeviceService.AddDevice:input_type -> godesk.AddDeviceRequest
+	7,  // 6: godesk.DeviceService.EditDevice:input_type -> godesk.EditDeviceRequest
+	8,  // 7: godesk.DeviceService.DeleteDevice:input_type -> godesk.DeleteDeviceRequest
+	1,  // 8: godesk.DeviceService.GetDeviceInfo:output_type -> godesk.DeviceInfoResponse
+	1,  // 9: godesk.DeviceService.CreateDevice:output_type -> godesk.DeviceInfoResponse
+	5,  // 10: godesk.DeviceService.GetDeviceList:output_type -> godesk.DeviceListResponse
+	10, // 11: godesk.DeviceService.AddDevice:output_type -> godesk.EmptyResponse
+	10, // 12: godesk.DeviceService.EditDevice:output_type -> godesk.EmptyResponse
+	10, // 13: godesk.DeviceService.DeleteDevice:output_type -> godesk.EmptyResponse
+	8,  // [8:14] is the sub-list for method output_type
+	2,  // [2:8] is the sub-list for method input_type
+	2,  // [2:2] is the sub-list for extension type_name
+	2,  // [2:2] is the sub-list for extension extendee
+	0,  // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_device_basic_proto_init() }
@@ -226,13 +630,14 @@ func file_device_basic_proto_init() {
 	if File_device_basic_proto != nil {
 		return
 	}
+	file_base_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_device_basic_proto_rawDesc), len(file_device_basic_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

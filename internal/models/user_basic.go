@@ -19,6 +19,9 @@ func (table *UserBasic) First() (*UserBasic, error) {
 	if table.Id != 0 {
 		tx.Where("id = ?", table.Id)
 	}
+	if table.Uuid != "" {
+		tx.Where("uuid = ?", table.Uuid)
+	}
 	if table.Username != "" {
 		tx.Where("username = ?", table.Username)
 	}

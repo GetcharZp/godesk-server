@@ -38,7 +38,6 @@ func (s *Service) GetUserInfo(ctx context.Context, in *godesk.EmptyRequest) (*go
 // UserRegister 用户注册
 func (s *Service) UserRegister(ctx context.Context, in *godesk.UserRegisterRequest) (*godesk.UserInfoResponse, error) {
 	ub := &models.UserBasic{
-		Uuid:     idutil.UUIDGenerate(),
 		Username: in.Username,
 		Password: util.PasswordEncrypt(in.Password),
 	}
@@ -46,6 +45,7 @@ func (s *Service) UserRegister(ctx context.Context, in *godesk.UserRegisterReque
 	if !errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, status.Errorf(codes.AlreadyExists, resp.MsgUserExist)
 	}
+	ub.Uuid = idutil.UUIDGenerate()
 	if err = ub.Create(); err != nil {
 		logger.Error("[db] create user basic error.", zap.Error(err))
 		return nil, status.Errorf(codes.Internal, err.Error())

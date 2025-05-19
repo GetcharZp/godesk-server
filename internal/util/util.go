@@ -4,8 +4,10 @@ import (
 	"errors"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/getcharzp/godesk-serve/define"
+	godesk "github.com/getcharzp/godesk-serve/proto"
 	"github.com/spf13/viper"
 	"github.com/up-zero/gotool/cryptoutil"
+	"reflect"
 	"time"
 )
 
@@ -41,4 +43,32 @@ func GenerateToken(uc *define.UserClaim) (string, error) {
 func PasswordEncrypt(s string) string {
 	p, _ := cryptoutil.Md5Iterations(s, 50)
 	return p
+}
+
+// InitBaseRequest  初始化BaseRequest
+func InitBaseRequest(obj any) {
+	v := reflect.ValueOf(obj).Elem()
+	t := v.Type()
+
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		value := v.Field(i)
+
+		if field.Type == reflect.TypeOf(&godesk.BaseRequest{}) {
+			if value.IsNil() {
+				value.Set(reflect.ValueOf(&godesk.BaseRequest{
+					Page: define.DefaultPage,
+					Size: define.DefaultSize,
+				}))
+			} else {
+				br := value.Interface().(*godesk.BaseRequest)
+				if br.Page == 0 {
+					br.Page = define.DefaultPage
+				}
+				if br.Size == 0 {
+					br.Size = define.DefaultSize
+				}
+			}
+		}
+	}
 }

@@ -10,8 +10,10 @@ import (
 )
 
 var publicMethods = map[string]struct{}{
-	"/godesk.UserService/UserLogin":    {},
-	"/godesk.UserService/UserRegister": {},
+	"/godesk.UserService/UserLogin":       {},
+	"/godesk.UserService/UserRegister":    {},
+	"/godesk.DeviceService/GetDeviceInfo": {},
+	"/godesk.DeviceService/CreateDevice":  {},
 }
 
 // UserAuth 用户鉴权
