@@ -39,6 +39,8 @@ message DeviceListItem {
   string os = 4;
   // 设备密码
   string password = 5;
+  // 在线状态，true=在线，false=离线
+  bool online = 6;
 }
 
 message DeviceListResponse {

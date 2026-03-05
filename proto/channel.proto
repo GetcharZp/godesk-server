@@ -3,16 +3,100 @@ syntax = "proto3";
 package godesk;
 option go_package = "./;godesk";
 
+// ChannelRequest 双向数据流的基础消息
 message ChannelRequest {
-  // 客户端唯一标识
-  string client_uuid = 1;
-  // 数据类型
-  string key = 2;
-  // 数据
-  bytes data = 3;
+  // 发送方客户端唯一标识
+  string send_client_uuid = 1;
+  // 目标客户端唯一标识
+  string target_client_uuid = 2;
+  // 数据类型（key 定义见下方注释）
+  string key = 3;
+  // 数据（JSON 格式，具体结构见各 key 的说明）
+  bytes data = 4;
 }
 
+// ChannelRequest Key 定义：
+//
+// "register"                       - 设备注册（控制端、被控端 -> 服务器）
+//                                    data: RegisterData
+// "heartbeat"                      - 心跳（控制端、被控端 -> 服务器）
+//                                    data: HeartbeatData
+// "control_started_request"        - 控制开始请求（控制端 -> 服务器 -> 被控端）
+//                                    data: ControlStartedRequestData
+// "control_started_response"       - 控制开始响应（被控端 -> 服务器 -> 控制端）
+//                                    data: ControlStartedResponseData
+// "control_ended_request"          - 控制结束请求（控制端 -> 服务器 -> 被控端）
+//                                    data: ControlEndedRequestData
+// "control_ended_response"         - 控制结束响应（被控端 -> 服务器 -> 控制端）
+//                                    data: ControlEndedResponseData
+// "screen_stream_data"             - 屏幕流数据（被控端 -> 服务器 -> 控制端）
+//                                    data: ScreenStreamData
+
+// RegisterData 设备注册数据（key = "register"）
+message RegisterData {
+  // 操作系统：windows, darwin, linux
+  string os = 1;
+  // 设备名称
+  string device_name = 2;
+}
+
+// HeartbeatData 心跳数据（key = "heartbeat"）
+message HeartbeatData {
+  // 时间戳（毫秒）
+  int64 timestamp = 1;
+}
+
+// ControlStartedRequestData 控制开始请求（控制端 = "control_started_request"）
+message ControlStartedRequestData {
+  // 被控端设备码
+  uint64 target_code = 1;
+  // 被控端密码
+  string target_password = 2;
+  // 是否请求完全控制权限（true=控制，false=仅查看）
+  bool request_control = 3;
+  // 时间戳（毫秒）
+  int64 timestamp = 4;
+}
+
+// ControlStartedResponseData 控制开始响应（控制端 = "control_started_response"）
+message ControlStartedResponseData {
+  // 响应码: 0=接受, 1=拒绝, 2=密码错误, 3=设备不存在, 4=设备离线
+  int32 code = 1;
+  // 被控端唯一标识
+  string uuid = 2;
+  // 被控端设备码
+  uint64 target_code = 3;
+}
+
+// ControlEndedRequestData 控制结束通知数据（key = "control_ended_request"）
+message ControlEndedRequestData {
+  // 被控端设备码
+  uint64 target_code = 1;
+  // 时间戳（毫秒）
+  int64 timestamp = 2;
+}
+
+// ControlEndedResponseData 控制结束通知数据（key = "control_ended_response"）
+message ControlEndedResponseData {
+  // 响应码: 0=成功, 1=失败
+  int32 code = 1;
+}
+
+// ScreenStreamData 屏幕流数据（key = "screen_stream_data"）
+message ScreenStreamData {
+  // 图像数据（Base64 编码的 JPEG/PNG 图片）
+  string image_data = 1;
+  // 图片格式：jpeg, png
+  string format = 2;
+  // 图片宽度（像素）
+  int32 width = 3;
+  // 图片高度（像素）
+  int32 height = 4;
+  // 时间戳（毫秒）
+  int64 timestamp = 5;
+}
 
 service ChannelService {
+  // DataStream 双向数据流
   rpc DataStream(stream ChannelRequest) returns (stream ChannelRequest) {}
 }

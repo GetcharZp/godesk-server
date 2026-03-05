@@ -2,16 +2,17 @@ package tests
 
 import (
 	"context"
+	"log"
+	"testing"
+
 	godesk "github.com/getcharzp/godesk-serve/proto"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
-	"log"
-	"testing"
 )
 
 func getDeviceServiceClient() (context.Context, godesk.DeviceServiceClient) {
-	conn, err := grpc.Dial(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient(addr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,7 +55,7 @@ func TestGetDeviceList(t *testing.T) {
 func TestAddDevice(t *testing.T) {
 	ctx, client := getDeviceServiceClient()
 	resp, err := client.AddDevice(ctx, &godesk.AddDeviceRequest{
-		Code:     100000003,
+		Code:     100000000,
 		Password: "123456",
 		Remark:   "test",
 	})

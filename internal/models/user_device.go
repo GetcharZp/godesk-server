@@ -58,3 +58,15 @@ func (table *UserDevice) List(in *godesk.DeviceListRequest) (*godesk.DeviceListR
 		List:  list,
 	}, nil
 }
+
+// GetDevicePassword 获取设备密码
+func (table *UserDevice) GetDevicePassword() (string, error) {
+	var result UserDevice
+	err := DB.Model(table).Select("device_password").
+		Where("device_code = ?", table.DeviceCode).
+		First(&result).Error
+	if err != nil {
+		return "", err
+	}
+	return result.DevicePassword, nil
+}

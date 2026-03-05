@@ -2,9 +2,11 @@ package device
 
 import (
 	"context"
+
 	"github.com/getcharzp/godesk-serve/define"
 	"github.com/getcharzp/godesk-serve/internal/models"
 	"github.com/getcharzp/godesk-serve/internal/resp"
+	"github.com/getcharzp/godesk-serve/internal/services/channel"
 	"github.com/getcharzp/godesk-serve/internal/util"
 	"github.com/getcharzp/godesk-serve/logger"
 	godesk "github.com/getcharzp/godesk-serve/proto"
@@ -59,6 +61,12 @@ func (s *Service) GetDeviceList(ctx context.Context, in *godesk.DeviceListReques
 	if err != nil {
 		return nil, status.Errorf(codes.Internal, err.Error())
 	}
+
+	// 设置设备在线状态
+	for _, device := range reply.List {
+		device.Online = channel.IsDeviceOnline(device.Code)
+	}
+
 	return reply, nil
 }
 
