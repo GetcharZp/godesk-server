@@ -52,15 +52,14 @@ func (c *channelServiceClient) DataStream(ctx context.Context, opts ...grpc.Call
 type ChannelService_DataStreamClient = grpc.BidiStreamingClient[ChannelRequest, ChannelRequest]
 
 // ChannelServiceServer is the server API for ChannelService service.
-// All implementations must embed UnimplementedChannelServiceServer
+// All implementations should embed UnimplementedChannelServiceServer
 // for forward compatibility.
 type ChannelServiceServer interface {
 	// DataStream 双向数据流
 	DataStream(grpc.BidiStreamingServer[ChannelRequest, ChannelRequest]) error
-	mustEmbedUnimplementedChannelServiceServer()
 }
 
-// UnimplementedChannelServiceServer must be embedded to have
+// UnimplementedChannelServiceServer should be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
@@ -70,8 +69,7 @@ type UnimplementedChannelServiceServer struct{}
 func (UnimplementedChannelServiceServer) DataStream(grpc.BidiStreamingServer[ChannelRequest, ChannelRequest]) error {
 	return status.Error(codes.Unimplemented, "method DataStream not implemented")
 }
-func (UnimplementedChannelServiceServer) mustEmbedUnimplementedChannelServiceServer() {}
-func (UnimplementedChannelServiceServer) testEmbeddedByValue()                        {}
+func (UnimplementedChannelServiceServer) testEmbeddedByValue() {}
 
 // UnsafeChannelServiceServer may be embedded to opt out of forward compatibility for this service.
 // Use of this interface is not recommended, as added methods to ChannelServiceServer will

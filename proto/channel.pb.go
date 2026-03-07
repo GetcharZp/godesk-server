@@ -515,6 +515,225 @@ func (x *ScreenStreamData) GetTimestamp() int64 {
 	return 0
 }
 
+// MouseMoveData 鼠标移动数据（key = "mouse_move"）
+type MouseMoveData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// X 坐标（像素）
+	X int32 `protobuf:"varint,1,opt,name=x,proto3" json:"x,omitempty"`
+	// Y 坐标（像素）
+	Y int32 `protobuf:"varint,2,opt,name=y,proto3" json:"y,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MouseMoveData) Reset() {
+	*x = MouseMoveData{}
+	mi := &file_channel_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MouseMoveData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MouseMoveData) ProtoMessage() {}
+
+func (x *MouseMoveData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MouseMoveData.ProtoReflect.Descriptor instead.
+func (*MouseMoveData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *MouseMoveData) GetX() int32 {
+	if x != nil {
+		return x.X
+	}
+	return 0
+}
+
+func (x *MouseMoveData) GetY() int32 {
+	if x != nil {
+		return x.Y
+	}
+	return 0
+}
+
+func (x *MouseMoveData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// MouseClickData 鼠标点击数据（key = "mouse_click"）
+type MouseClickData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// X 坐标（像素）
+	X int32 `protobuf:"varint,1,opt,name=x,proto3" json:"x,omitempty"`
+	// Y 坐标（像素）
+	Y int32 `protobuf:"varint,2,opt,name=y,proto3" json:"y,omitempty"`
+	// 鼠标按钮：0=左键, 1=右键, 2=中键
+	Button int32 `protobuf:"varint,3,opt,name=button,proto3" json:"button,omitempty"`
+	// 动作：down=按下, up=释放
+	Action string `protobuf:"bytes,4,opt,name=action,proto3" json:"action,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,5,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MouseClickData) Reset() {
+	*x = MouseClickData{}
+	mi := &file_channel_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MouseClickData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MouseClickData) ProtoMessage() {}
+
+func (x *MouseClickData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MouseClickData.ProtoReflect.Descriptor instead.
+func (*MouseClickData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *MouseClickData) GetX() int32 {
+	if x != nil {
+		return x.X
+	}
+	return 0
+}
+
+func (x *MouseClickData) GetY() int32 {
+	if x != nil {
+		return x.Y
+	}
+	return 0
+}
+
+func (x *MouseClickData) GetButton() int32 {
+	if x != nil {
+		return x.Button
+	}
+	return 0
+}
+
+func (x *MouseClickData) GetAction() string {
+	if x != nil {
+		return x.Action
+	}
+	return ""
+}
+
+func (x *MouseClickData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// MouseScrollData 鼠标滚轮数据（key = "mouse_scroll"）
+type MouseScrollData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// X 坐标（像素）
+	X int32 `protobuf:"varint,1,opt,name=x,proto3" json:"x,omitempty"`
+	// Y 坐标（像素）
+	Y int32 `protobuf:"varint,2,opt,name=y,proto3" json:"y,omitempty"`
+	// 垂直滚动量（正值向下，负值向上）
+	DeltaY int32 `protobuf:"varint,3,opt,name=delta_y,json=deltaY,proto3" json:"delta_y,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,4,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MouseScrollData) Reset() {
+	*x = MouseScrollData{}
+	mi := &file_channel_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MouseScrollData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MouseScrollData) ProtoMessage() {}
+
+func (x *MouseScrollData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MouseScrollData.ProtoReflect.Descriptor instead.
+func (*MouseScrollData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *MouseScrollData) GetX() int32 {
+	if x != nil {
+		return x.X
+	}
+	return 0
+}
+
+func (x *MouseScrollData) GetY() int32 {
+	if x != nil {
+		return x.Y
+	}
+	return 0
+}
+
+func (x *MouseScrollData) GetDeltaY() int32 {
+	if x != nil {
+		return x.DeltaY
+	}
+	return 0
+}
+
+func (x *MouseScrollData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
 var File_channel_proto protoreflect.FileDescriptor
 
 const file_channel_proto_rawDesc = "" +
@@ -554,7 +773,22 @@ const file_channel_proto_rawDesc = "" +
 	"\x06format\x18\x02 \x01(\tR\x06format\x12\x14\n" +
 	"\x05width\x18\x03 \x01(\x05R\x05width\x12\x16\n" +
 	"\x06height\x18\x04 \x01(\x05R\x06height\x12\x1c\n" +
-	"\ttimestamp\x18\x05 \x01(\x03R\ttimestamp2T\n" +
+	"\ttimestamp\x18\x05 \x01(\x03R\ttimestamp\"I\n" +
+	"\rMouseMoveData\x12\f\n" +
+	"\x01x\x18\x01 \x01(\x05R\x01x\x12\f\n" +
+	"\x01y\x18\x02 \x01(\x05R\x01y\x12\x1c\n" +
+	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp\"z\n" +
+	"\x0eMouseClickData\x12\f\n" +
+	"\x01x\x18\x01 \x01(\x05R\x01x\x12\f\n" +
+	"\x01y\x18\x02 \x01(\x05R\x01y\x12\x16\n" +
+	"\x06button\x18\x03 \x01(\x05R\x06button\x12\x16\n" +
+	"\x06action\x18\x04 \x01(\tR\x06action\x12\x1c\n" +
+	"\ttimestamp\x18\x05 \x01(\x03R\ttimestamp\"d\n" +
+	"\x0fMouseScrollData\x12\f\n" +
+	"\x01x\x18\x01 \x01(\x05R\x01x\x12\f\n" +
+	"\x01y\x18\x02 \x01(\x05R\x01y\x12\x17\n" +
+	"\adelta_y\x18\x03 \x01(\x05R\x06deltaY\x12\x1c\n" +
+	"\ttimestamp\x18\x04 \x01(\x03R\ttimestamp2T\n" +
 	"\x0eChannelService\x12B\n" +
 	"\n" +
 	"DataStream\x12\x16.godesk.ChannelRequest\x1a\x16.godesk.ChannelRequest\"\x00(\x010\x01B\vZ\t./;godeskb\x06proto3"
@@ -571,7 +805,7 @@ func file_channel_proto_rawDescGZIP() []byte {
 	return file_channel_proto_rawDescData
 }
 
-var file_channel_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_channel_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_channel_proto_goTypes = []any{
 	(*ChannelRequest)(nil),             // 0: godesk.ChannelRequest
 	(*RegisterData)(nil),               // 1: godesk.RegisterData
@@ -581,6 +815,9 @@ var file_channel_proto_goTypes = []any{
 	(*ControlEndedRequestData)(nil),    // 5: godesk.ControlEndedRequestData
 	(*ControlEndedResponseData)(nil),   // 6: godesk.ControlEndedResponseData
 	(*ScreenStreamData)(nil),           // 7: godesk.ScreenStreamData
+	(*MouseMoveData)(nil),              // 8: godesk.MouseMoveData
+	(*MouseClickData)(nil),             // 9: godesk.MouseClickData
+	(*MouseScrollData)(nil),            // 10: godesk.MouseScrollData
 }
 var file_channel_proto_depIdxs = []int32{
 	0, // 0: godesk.ChannelService.DataStream:input_type -> godesk.ChannelRequest
@@ -603,7 +840,7 @@ func file_channel_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_channel_proto_rawDesc), len(file_channel_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

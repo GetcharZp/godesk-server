@@ -31,6 +31,12 @@ message ChannelRequest {
 //                                    data: ControlEndedResponseData
 // "screen_stream_data"             - 屏幕流数据（被控端 -> 服务器 -> 控制端）
 //                                    data: ScreenStreamData
+// "mouse_move"                     - 鼠标移动（控制端 -> 服务器 -> 被控端）
+//                                    data: MouseMoveData
+// "mouse_click"                    - 鼠标点击（控制端 -> 服务器 -> 被控端）
+//                                    data: MouseClickData
+// "mouse_scroll"                   - 鼠标滚轮（控制端 -> 服务器 -> 被控端）
+//                                    data: MouseScrollData
 
 // RegisterData 设备注册数据（key = "register"）
 message RegisterData {
@@ -95,6 +101,43 @@ message ScreenStreamData {
   // 时间戳（毫秒）
   int64 timestamp = 5;
 }
+
+// MouseMoveData 鼠标移动数据（key = "mouse_move"）
+message MouseMoveData {
+  // X 坐标（像素）
+  int32 x = 1;
+  // Y 坐标（像素）
+  int32 y = 2;
+  // 时间戳（毫秒）
+  int64 timestamp = 3;
+}
+
+// MouseClickData 鼠标点击数据（key = "mouse_click"）
+message MouseClickData {
+  // X 坐标（像素）
+  int32 x = 1;
+  // Y 坐标（像素）
+  int32 y = 2;
+  // 鼠标按钮：0=左键, 1=右键, 2=中键
+  int32 button = 3;
+  // 动作：down=按下, up=释放
+  string action = 4;
+  // 时间戳（毫秒）
+  int64 timestamp = 5;
+}
+
+// MouseScrollData 鼠标滚轮数据（key = "mouse_scroll"）
+message MouseScrollData {
+  // X 坐标（像素）
+  int32 x = 1;
+  // Y 坐标（像素）
+  int32 y = 2;
+  // 垂直滚动量（正值向下，负值向上）
+  int32 delta_y = 3;
+  // 时间戳（毫秒）
+  int64 timestamp = 4;
+}
+
 
 service ChannelService {
   // DataStream 双向数据流

@@ -157,6 +157,12 @@ func (s *Service) handleRequest(req *pb.ChannelRequest) {
 		s.handleControlEndedResponse(req)
 	case "screen_stream_data":
 		s.handleScreenStreamData(req)
+	case "mouse_move":
+		s.handleMouseMove(req)
+	case "mouse_click":
+		s.handleMouseClick(req)
+	case "mouse_scroll":
+		s.handleMouseScroll(req)
 	default:
 		logger.Warn("[handle] unknown key", zap.String("key", req.Key))
 	}
@@ -322,10 +328,10 @@ func (s *Service) handleControlEndedResponse(req *pb.ChannelRequest) {
 
 // handleScreenStreamData 处理屏幕流数据（被控端 -> 控制端）
 func (s *Service) handleScreenStreamData(req *pb.ChannelRequest) {
-	logger.Info("[screen] stream data",
-		zap.String("from", req.SendClientUuid),
-		zap.String("to", req.TargetClientUuid),
-		zap.Int("size", len(req.Data)))
+	// logger.Info("[screen] stream data",
+	// 	zap.String("from", req.SendClientUuid),
+	// 	zap.String("to", req.TargetClientUuid),
+	// 	zap.Int("size", len(req.Data)))
 
 	if req.TargetClientUuid == "" {
 		logger.Error("[screen] target_client_uuid is empty")
@@ -335,6 +341,84 @@ func (s *Service) handleScreenStreamData(req *pb.ChannelRequest) {
 	// 直接转发给控制端
 	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
 		logger.Error("[screen] forward error", zap.Error(err))
+	}
+}
+
+// handleMouseMove 处理鼠标移动（控制端 -> 被控端）
+func (s *Service) handleMouseMove(req *pb.ChannelRequest) {
+	var data pb.MouseMoveData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[mouse] move unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[mouse] move",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.Int32("x", data.X),
+		zap.Int32("y", data.Y))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[mouse] move target_client_uuid is empty")
+		return
+	}
+
+	// 转发给被控端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[mouse] move forward error", zap.Error(err))
+	}
+}
+
+// handleMouseClick 处理鼠标点击（控制端 -> 被控端）
+func (s *Service) handleMouseClick(req *pb.ChannelRequest) {
+	var data pb.MouseClickData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[mouse] click unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[mouse] click",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.Int32("x", data.X),
+		zap.Int32("y", data.Y),
+		zap.Int32("button", data.Button),
+		zap.String("action", data.Action))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[mouse] click target_client_uuid is empty")
+		return
+	}
+
+	// 转发给被控端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[mouse] click forward error", zap.Error(err))
+	}
+}
+
+// handleMouseScroll 处理鼠标滚轮（控制端 -> 被控端）
+func (s *Service) handleMouseScroll(req *pb.ChannelRequest) {
+	var data pb.MouseScrollData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[mouse] scroll unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[mouse] scroll",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.Int32("x", data.X),
+		zap.Int32("y", data.Y),
+		zap.Int32("delta_y", data.DeltaY))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[mouse] scroll target_client_uuid is empty")
+		return
+	}
+
+	// 转发给被控端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[mouse] scroll forward error", zap.Error(err))
 	}
 }
 
