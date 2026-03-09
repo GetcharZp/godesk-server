@@ -734,6 +734,198 @@ func (x *MouseScrollData) GetTimestamp() int64 {
 	return 0
 }
 
+// KeyTapData 键盘按键数据（key = "key_tap"）
+type KeyTapData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 按键名称（小写，如 "a", "enter", "ctrl" 等）
+	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	// 修饰键列表（可选），如 ["ctrl", "shift"]
+	Modifiers []string `protobuf:"bytes,2,rep,name=modifiers,proto3" json:"modifiers,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *KeyTapData) Reset() {
+	*x = KeyTapData{}
+	mi := &file_channel_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *KeyTapData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*KeyTapData) ProtoMessage() {}
+
+func (x *KeyTapData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use KeyTapData.ProtoReflect.Descriptor instead.
+func (*KeyTapData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *KeyTapData) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *KeyTapData) GetModifiers() []string {
+	if x != nil {
+		return x.Modifiers
+	}
+	return nil
+}
+
+func (x *KeyTapData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// KeyDownData 键盘按下数据（key = "key_down"）
+type KeyDownData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 按键名称（小写）
+	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	// 修饰键列表（可选）
+	Modifiers []string `protobuf:"bytes,2,rep,name=modifiers,proto3" json:"modifiers,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *KeyDownData) Reset() {
+	*x = KeyDownData{}
+	mi := &file_channel_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *KeyDownData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*KeyDownData) ProtoMessage() {}
+
+func (x *KeyDownData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use KeyDownData.ProtoReflect.Descriptor instead.
+func (*KeyDownData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *KeyDownData) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *KeyDownData) GetModifiers() []string {
+	if x != nil {
+		return x.Modifiers
+	}
+	return nil
+}
+
+func (x *KeyDownData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// KeyUpData 键盘释放数据（key = "key_up"）
+type KeyUpData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 按键名称（小写）
+	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	// 修饰键列表（可选）
+	Modifiers []string `protobuf:"bytes,2,rep,name=modifiers,proto3" json:"modifiers,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *KeyUpData) Reset() {
+	*x = KeyUpData{}
+	mi := &file_channel_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *KeyUpData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*KeyUpData) ProtoMessage() {}
+
+func (x *KeyUpData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use KeyUpData.ProtoReflect.Descriptor instead.
+func (*KeyUpData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *KeyUpData) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *KeyUpData) GetModifiers() []string {
+	if x != nil {
+		return x.Modifiers
+	}
+	return nil
+}
+
+func (x *KeyUpData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
 var File_channel_proto protoreflect.FileDescriptor
 
 const file_channel_proto_rawDesc = "" +
@@ -788,7 +980,20 @@ const file_channel_proto_rawDesc = "" +
 	"\x01x\x18\x01 \x01(\x05R\x01x\x12\f\n" +
 	"\x01y\x18\x02 \x01(\x05R\x01y\x12\x17\n" +
 	"\adelta_y\x18\x03 \x01(\x05R\x06deltaY\x12\x1c\n" +
-	"\ttimestamp\x18\x04 \x01(\x03R\ttimestamp2T\n" +
+	"\ttimestamp\x18\x04 \x01(\x03R\ttimestamp\"Z\n" +
+	"\n" +
+	"KeyTapData\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x1c\n" +
+	"\tmodifiers\x18\x02 \x03(\tR\tmodifiers\x12\x1c\n" +
+	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp\"[\n" +
+	"\vKeyDownData\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x1c\n" +
+	"\tmodifiers\x18\x02 \x03(\tR\tmodifiers\x12\x1c\n" +
+	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp\"Y\n" +
+	"\tKeyUpData\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x1c\n" +
+	"\tmodifiers\x18\x02 \x03(\tR\tmodifiers\x12\x1c\n" +
+	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp2T\n" +
 	"\x0eChannelService\x12B\n" +
 	"\n" +
 	"DataStream\x12\x16.godesk.ChannelRequest\x1a\x16.godesk.ChannelRequest\"\x00(\x010\x01B\vZ\t./;godeskb\x06proto3"
@@ -805,7 +1010,7 @@ func file_channel_proto_rawDescGZIP() []byte {
 	return file_channel_proto_rawDescData
 }
 
-var file_channel_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_channel_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_channel_proto_goTypes = []any{
 	(*ChannelRequest)(nil),             // 0: godesk.ChannelRequest
 	(*RegisterData)(nil),               // 1: godesk.RegisterData
@@ -818,6 +1023,9 @@ var file_channel_proto_goTypes = []any{
 	(*MouseMoveData)(nil),              // 8: godesk.MouseMoveData
 	(*MouseClickData)(nil),             // 9: godesk.MouseClickData
 	(*MouseScrollData)(nil),            // 10: godesk.MouseScrollData
+	(*KeyTapData)(nil),                 // 11: godesk.KeyTapData
+	(*KeyDownData)(nil),                // 12: godesk.KeyDownData
+	(*KeyUpData)(nil),                  // 13: godesk.KeyUpData
 }
 var file_channel_proto_depIdxs = []int32{
 	0, // 0: godesk.ChannelService.DataStream:input_type -> godesk.ChannelRequest
@@ -840,7 +1048,7 @@ func file_channel_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_channel_proto_rawDesc), len(file_channel_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -37,6 +37,12 @@ message ChannelRequest {
 //                                    data: MouseClickData
 // "mouse_scroll"                   - 鼠标滚轮（控制端 -> 服务器 -> 被控端）
 //                                    data: MouseScrollData
+// "key_tap"                        - 键盘按键（按下并释放）（控制端 -> 服务器 -> 被控端）
+//                                    data: KeyTapData
+// "key_down"                       - 键盘按下（控制端 -> 服务器 -> 被控端）
+//                                    data: KeyDownData
+// "key_up"                         - 键盘释放（控制端 -> 服务器 -> 被控端）
+//                                    data: KeyUpData
 
 // RegisterData 设备注册数据（key = "register"）
 message RegisterData {
@@ -138,6 +144,35 @@ message MouseScrollData {
   int64 timestamp = 4;
 }
 
+// KeyTapData 键盘按键数据（key = "key_tap"）
+message KeyTapData {
+  // 按键名称（小写，如 "a", "enter", "ctrl" 等）
+  string key = 1;
+  // 修饰键列表（可选），如 ["ctrl", "shift"]
+  repeated string modifiers = 2;
+  // 时间戳（毫秒）
+  int64 timestamp = 3;
+}
+
+// KeyDownData 键盘按下数据（key = "key_down"）
+message KeyDownData {
+  // 按键名称（小写）
+  string key = 1;
+  // 修饰键列表（可选）
+  repeated string modifiers = 2;
+  // 时间戳（毫秒）
+  int64 timestamp = 3;
+}
+
+// KeyUpData 键盘释放数据（key = "key_up"）
+message KeyUpData {
+  // 按键名称（小写）
+  string key = 1;
+  // 修饰键列表（可选）
+  repeated string modifiers = 2;
+  // 时间戳（毫秒）
+  int64 timestamp = 3;
+}
 
 service ChannelService {
   // DataStream 双向数据流

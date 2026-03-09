@@ -163,6 +163,12 @@ func (s *Service) handleRequest(req *pb.ChannelRequest) {
 		s.handleMouseClick(req)
 	case "mouse_scroll":
 		s.handleMouseScroll(req)
+	case "key_tap":
+		s.handleKeyTap(req)
+	case "key_down":
+		s.handleKeyDown(req)
+	case "key_up":
+		s.handleKeyUp(req)
 	default:
 		logger.Warn("[handle] unknown key", zap.String("key", req.Key))
 	}
@@ -419,6 +425,81 @@ func (s *Service) handleMouseScroll(req *pb.ChannelRequest) {
 	// 转发给被控端
 	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
 		logger.Error("[mouse] scroll forward error", zap.Error(err))
+	}
+}
+
+// handleKeyTap 处理键盘按键（控制端 -> 被控端）
+func (s *Service) handleKeyTap(req *pb.ChannelRequest) {
+	var data pb.KeyTapData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[key] tap unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[key] tap",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.String("key", data.Key),
+		zap.Strings("modifiers", data.Modifiers))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[key] tap target_client_uuid is empty")
+		return
+	}
+
+	// 转发给被控端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[key] tap forward error", zap.Error(err))
+	}
+}
+
+// handleKeyDown 处理键盘按下（控制端 -> 被控端）
+func (s *Service) handleKeyDown(req *pb.ChannelRequest) {
+	var data pb.KeyDownData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[key] down unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[key] down",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.String("key", data.Key),
+		zap.Strings("modifiers", data.Modifiers))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[key] down target_client_uuid is empty")
+		return
+	}
+
+	// 转发给被控端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[key] down forward error", zap.Error(err))
+	}
+}
+
+// handleKeyUp 处理键盘释放（控制端 -> 被控端）
+func (s *Service) handleKeyUp(req *pb.ChannelRequest) {
+	var data pb.KeyUpData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[key] up unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[key] up",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.String("key", data.Key),
+		zap.Strings("modifiers", data.Modifiers))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[key] up target_client_uuid is empty")
+		return
+	}
+
+	// 转发给被控端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[key] up forward error", zap.Error(err))
 	}
 }
 
