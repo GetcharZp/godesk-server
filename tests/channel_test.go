@@ -147,13 +147,16 @@ func TestScreenStreamFlow(t *testing.T) {
 		t.Fatal("超时：控制端没有收到控制开始响应")
 	}
 
-	// 5. 被控端发送屏幕流数据
+	// 5. 被控端发送视频帧数据（H.264格式）
 	screenData, _ := json.Marshal(&pb.ScreenStreamData{
-		ImageData: "base64encodedimage",
-		Format:    "jpeg",
-		Width:     1920,
-		Height:    1080,
-		Timestamp: time.Now().UnixMilli(),
+		SequenceId: 1,
+		FrameData:  []byte("h264encodedframe"),
+		Codec:      "h264",
+		Width:      1920,
+		Height:     1080,
+		Timestamp:  time.Now().UnixMilli(),
+		FrameType:  1, // I帧
+		ExtraData:  []byte("spsppsdata"),
 	})
 	screenReq := &pb.ChannelRequest{
 		SendClientUuid:   targetUUID,
@@ -162,9 +165,9 @@ func TestScreenStreamFlow(t *testing.T) {
 		Data:             screenData,
 	}
 	go service.HandleRequest(screenReq)
-	t.Log("Step 5: 被控端发送屏幕流数据")
+	t.Log("Step 5: 被控端发送视频帧数据")
 
-	// 6. 验证控制端收到屏幕流数据
+	// 6. 验证控制端收到视频帧数据
 	select {
 	case receivedReq := <-controllerStream.sendChan:
 		if receivedReq.Key != "screen_stream_data" {
@@ -179,12 +182,18 @@ func TestScreenStreamFlow(t *testing.T) {
 
 		var receivedScreenData pb.ScreenStreamData
 		if err := json.Unmarshal(receivedReq.Data, &receivedScreenData); err != nil {
-			t.Errorf("解析屏幕数据失败: %v", err)
+			t.Errorf("解析视频帧数据失败: %v", err)
 		}
-		if receivedScreenData.ImageData != "base64encodedimage" {
-			t.Errorf("屏幕数据不匹配")
+		if receivedScreenData.SequenceId != 1 {
+			t.Errorf("序列号不匹配，期望 1，实际是 %d", receivedScreenData.SequenceId)
 		}
-		t.Log("Step 6: 控制端成功收到屏幕流数据")
+		if receivedScreenData.Codec != "h264" {
+			t.Errorf("编码格式不匹配，期望 h264，实际是 %s", receivedScreenData.Codec)
+		}
+		if receivedScreenData.FrameType != 1 {
+			t.Errorf("帧类型不匹配，期望 I帧(1)，实际是 %d", receivedScreenData.FrameType)
+		}
+		t.Log("Step 6: 控制端成功收到视频帧数据")
 
 	case <-time.After(2 * time.Second):
 		t.Fatal("超时：控制端没有收到屏幕流数据")
@@ -242,7 +251,7 @@ func TestScreenStreamFlow(t *testing.T) {
 	t.Log("完整屏幕流流程测试通过！")
 }
 
-// TestScreenStreamDataForwarding 测试屏幕流数据转发
+// TestScreenStreamDataForwarding 测试视频帧数据转发
 func TestScreenStreamDataForwarding(t *testing.T) {
 	service := &channel.Service{}
 
@@ -257,13 +266,16 @@ func TestScreenStreamDataForwarding(t *testing.T) {
 	connMap.Store(targetUUID, targetStream)
 	connMap.Store(controllerUUID, controllerStream)
 
-	// 发送屏幕流数据
+	// 发送视频帧数据（H.265格式）
 	screenData, _ := json.Marshal(&pb.ScreenStreamData{
-		ImageData: "test-image-data",
-		Format:    "jpeg",
-		Width:     1920,
-		Height:    1080,
-		Timestamp: time.Now().UnixMilli(),
+		SequenceId: 100,
+		FrameData:  []byte("h265encodedframe"),
+		Codec:      "h265",
+		Width:      2560,
+		Height:     1440,
+		Timestamp:  time.Now().UnixMilli(),
+		FrameType:  0, // P帧
+		ExtraData:  []byte("spsppsdata"),
 	})
 	req := &pb.ChannelRequest{
 		SendClientUuid:   targetUUID,
@@ -272,7 +284,7 @@ func TestScreenStreamDataForwarding(t *testing.T) {
 		Data:             screenData,
 	}
 
-	// 处理屏幕流数据
+	// 处理视频帧数据
 	go service.HandleRequest(req)
 
 	// 验证转发
@@ -287,7 +299,22 @@ func TestScreenStreamDataForwarding(t *testing.T) {
 		if forwardedReq.TargetClientUuid != controllerUUID {
 			t.Errorf("TargetClientUuid不匹配: got %s, want %s", forwardedReq.TargetClientUuid, controllerUUID)
 		}
-		t.Log("屏幕流数据转发成功")
+
+		// 验证视频帧数据
+		var receivedData pb.ScreenStreamData
+		if err := json.Unmarshal(forwardedReq.Data, &receivedData); err != nil {
+			t.Errorf("解析视频帧数据失败: %v", err)
+		}
+		if receivedData.SequenceId != 100 {
+			t.Errorf("序列号不匹配: got %d, want 100", receivedData.SequenceId)
+		}
+		if receivedData.Codec != "h265" {
+			t.Errorf("编码格式不匹配: got %s, want h265", receivedData.Codec)
+		}
+		if receivedData.FrameType != 0 {
+			t.Errorf("帧类型不匹配: got %d, want P帧(0)", receivedData.FrameType)
+		}
+		t.Log("视频帧数据转发成功")
 
 	case <-time.After(2 * time.Second):
 		t.Error("超时: 没有收到转发的屏幕流数据")

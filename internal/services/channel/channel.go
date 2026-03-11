@@ -334,10 +334,27 @@ func (s *Service) handleControlEndedResponse(req *pb.ChannelRequest) {
 
 // handleScreenStreamData 处理屏幕流数据（被控端 -> 控制端）
 func (s *Service) handleScreenStreamData(req *pb.ChannelRequest) {
-	// logger.Info("[screen] stream data",
+	var data pb.ScreenStreamData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[screen] unmarshal error", zap.Error(err))
+		return
+	}
+
+	// 帧类型名称
+	// frameTypeName := "P"
+	// if data.FrameType == 1 {
+	// 	frameTypeName = "I"
+	// }
+
+	// logger.Info("[screen] video frame",
 	// 	zap.String("from", req.SendClientUuid),
 	// 	zap.String("to", req.TargetClientUuid),
-	// 	zap.Int("size", len(req.Data)))
+	// 	zap.Uint64("seq", data.SequenceId),
+	// 	zap.String("codec", data.Codec),
+	// 	zap.String("type", frameTypeName),
+	// 	zap.Int32("width", data.Width),
+	// 	zap.Int32("height", data.Height),
+	// 	zap.Int("size", len(data.FrameData)))
 
 	if req.TargetClientUuid == "" {
 		logger.Error("[screen] target_client_uuid is empty")

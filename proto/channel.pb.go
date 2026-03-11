@@ -436,16 +436,22 @@ func (x *ControlEndedResponseData) GetCode() int32 {
 // ScreenStreamData 屏幕流数据（key = "screen_stream_data"）
 type ScreenStreamData struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
-	// 图像数据（Base64 编码的 JPEG/PNG 图片）
-	ImageData string `protobuf:"bytes,1,opt,name=image_data,json=imageData,proto3" json:"image_data,omitempty"`
-	// 图片格式：jpeg, png
-	Format string `protobuf:"bytes,2,opt,name=format,proto3" json:"format,omitempty"`
+	// 序列号
+	SequenceId uint64 `protobuf:"varint,1,opt,name=sequence_id,json=sequenceId,proto3" json:"sequence_id,omitempty"`
+	// 帧数据
+	FrameData []byte `protobuf:"bytes,2,opt,name=frame_data,json=frameData,proto3" json:"frame_data,omitempty"`
+	// 编码格式 jpeg
+	Codec string `protobuf:"bytes,3,opt,name=codec,proto3" json:"codec,omitempty"`
 	// 图片宽度（像素）
-	Width int32 `protobuf:"varint,3,opt,name=width,proto3" json:"width,omitempty"`
+	Width int32 `protobuf:"varint,4,opt,name=width,proto3" json:"width,omitempty"`
 	// 图片高度（像素）
-	Height int32 `protobuf:"varint,4,opt,name=height,proto3" json:"height,omitempty"`
+	Height int32 `protobuf:"varint,5,opt,name=height,proto3" json:"height,omitempty"`
 	// 时间戳（毫秒）
-	Timestamp     int64 `protobuf:"varint,5,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	Timestamp int64 `protobuf:"varint,6,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	// 帧类型：0=P帧 1=I帧
+	FrameType int32 `protobuf:"varint,7,opt,name=frame_type,json=frameType,proto3" json:"frame_type,omitempty"`
+	// SPS/PPS
+	ExtraData     []byte `protobuf:"bytes,8,opt,name=extra_data,json=extraData,proto3" json:"extra_data,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -480,16 +486,23 @@ func (*ScreenStreamData) Descriptor() ([]byte, []int) {
 	return file_channel_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *ScreenStreamData) GetImageData() string {
+func (x *ScreenStreamData) GetSequenceId() uint64 {
 	if x != nil {
-		return x.ImageData
+		return x.SequenceId
 	}
-	return ""
+	return 0
 }
 
-func (x *ScreenStreamData) GetFormat() string {
+func (x *ScreenStreamData) GetFrameData() []byte {
 	if x != nil {
-		return x.Format
+		return x.FrameData
+	}
+	return nil
+}
+
+func (x *ScreenStreamData) GetCodec() string {
+	if x != nil {
+		return x.Codec
 	}
 	return ""
 }
@@ -513,6 +526,20 @@ func (x *ScreenStreamData) GetTimestamp() int64 {
 		return x.Timestamp
 	}
 	return 0
+}
+
+func (x *ScreenStreamData) GetFrameType() int32 {
+	if x != nil {
+		return x.FrameType
+	}
+	return 0
+}
+
+func (x *ScreenStreamData) GetExtraData() []byte {
+	if x != nil {
+		return x.ExtraData
+	}
+	return nil
 }
 
 // MouseMoveData 鼠标移动数据（key = "mouse_move"）
@@ -958,14 +985,20 @@ const file_channel_proto_rawDesc = "" +
 	"targetCode\x12\x1c\n" +
 	"\ttimestamp\x18\x02 \x01(\x03R\ttimestamp\".\n" +
 	"\x18ControlEndedResponseData\x12\x12\n" +
-	"\x04code\x18\x01 \x01(\x05R\x04code\"\x95\x01\n" +
-	"\x10ScreenStreamData\x12\x1d\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04code\"\xf2\x01\n" +
+	"\x10ScreenStreamData\x12\x1f\n" +
+	"\vsequence_id\x18\x01 \x01(\x04R\n" +
+	"sequenceId\x12\x1d\n" +
 	"\n" +
-	"image_data\x18\x01 \x01(\tR\timageData\x12\x16\n" +
-	"\x06format\x18\x02 \x01(\tR\x06format\x12\x14\n" +
-	"\x05width\x18\x03 \x01(\x05R\x05width\x12\x16\n" +
-	"\x06height\x18\x04 \x01(\x05R\x06height\x12\x1c\n" +
-	"\ttimestamp\x18\x05 \x01(\x03R\ttimestamp\"I\n" +
+	"frame_data\x18\x02 \x01(\fR\tframeData\x12\x14\n" +
+	"\x05codec\x18\x03 \x01(\tR\x05codec\x12\x14\n" +
+	"\x05width\x18\x04 \x01(\x05R\x05width\x12\x16\n" +
+	"\x06height\x18\x05 \x01(\x05R\x06height\x12\x1c\n" +
+	"\ttimestamp\x18\x06 \x01(\x03R\ttimestamp\x12\x1d\n" +
+	"\n" +
+	"frame_type\x18\a \x01(\x05R\tframeType\x12\x1d\n" +
+	"\n" +
+	"extra_data\x18\b \x01(\fR\textraData\"I\n" +
 	"\rMouseMoveData\x12\f\n" +
 	"\x01x\x18\x01 \x01(\x05R\x01x\x12\f\n" +
 	"\x01y\x18\x02 \x01(\x05R\x01y\x12\x1c\n" +

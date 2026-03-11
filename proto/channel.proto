@@ -96,16 +96,22 @@ message ControlEndedResponseData {
 
 // ScreenStreamData 屏幕流数据（key = "screen_stream_data"）
 message ScreenStreamData {
-  // 图像数据（Base64 编码的 JPEG/PNG 图片）
-  string image_data = 1;
-  // 图片格式：jpeg, png
-  string format = 2;
+  // 序列号
+  uint64 sequence_id = 1;
+  // 帧数据
+  bytes frame_data = 2;
+  // 编码格式 jpeg
+  string codec = 3;
   // 图片宽度（像素）
-  int32 width = 3;
+  int32 width = 4;
   // 图片高度（像素）
-  int32 height = 4;
+  int32 height = 5;
   // 时间戳（毫秒）
-  int64 timestamp = 5;
+  int64 timestamp = 6;
+  // 帧类型：0=P帧 1=I帧
+  int32 frame_type = 7;
+  // SPS/PPS
+  bytes extra_data = 8;
 }
 
 // MouseMoveData 鼠标移动数据（key = "mouse_move"）
