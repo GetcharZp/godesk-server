@@ -1,10 +1,11 @@
 package models
 
 import (
+	"time"
+
 	"github.com/spf13/viper"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"time"
 )
 
 var DB *gorm.DB
@@ -16,7 +17,7 @@ func NewGormDB() {
 	if err != nil {
 		panic(err)
 	}
-	err = db.AutoMigrate(&DeviceBasic{}, &UserBasic{}, &UserDevice{})
+	err = db.AutoMigrate(&DeviceBasic{}, &UserBasic{}, &UserDevice{}, &ConfigBasic{})
 	if err != nil {
 		panic(err)
 	}
