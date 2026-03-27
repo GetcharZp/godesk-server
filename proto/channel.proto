@@ -43,6 +43,30 @@ message ChannelRequest {
 //                                    data: KeyDownData
 // "key_up"                         - 键盘释放（控制端 -> 服务器 -> 被控端）
 //                                    data: KeyUpData
+// "file_list_request"              - 文件列表请求（控制端 -> 服务器 -> 被控端）
+//                                    data: FileListRequestData
+// "file_list_response"             - 文件列表响应（被控端 -> 服务器 -> 控制端）
+//                                    data: FileListResponseData
+// "file_transfer_start"            - 文件传输开始（控制端 <-> 被控端）
+//                                    data: FileTransferStartData
+// "file_transfer_data"             - 文件传输数据块（控制端 <-> 被控端）
+//                                    data: FileTransferData
+// "file_transfer_complete"         - 文件传输完成（控制端 <-> 被控端）
+//                                    data: FileTransferCompleteData
+// "file_transfer_cancel"           - 文件传输取消（控制端 <-> 被控端）
+//                                    data: FileTransferCancelData
+// "file_rename_request"            - 文件重命名请求（控制端 -> 服务器 -> 被控端）
+//                                    data: FileRenameRequestData
+// "file_rename_response"           - 文件重命名响应（被控端 -> 服务器 -> 控制端）
+//                                    data: FileRenameResponseData
+// "file_delete_request"            - 文件删除请求（控制端 -> 服务器 -> 被控端）
+//                                    data: FileDeleteRequestData
+// "file_delete_response"           - 文件删除响应（被控端 -> 服务器 -> 控制端）
+//                                    data: FileDeleteResponseData
+// "file_create_folder_request"     - 创建文件夹请求（控制端 -> 服务器 -> 被控端）
+//                                    data: FileCreateFolderRequestData
+// "file_create_folder_response"    - 创建文件夹响应（被控端 -> 服务器 -> 控制端）
+//                                    data: FileCreateFolderResponseData
 
 // RegisterData 设备注册数据（key = "register"）
 message RegisterData {
@@ -178,6 +202,186 @@ message KeyUpData {
   repeated string modifiers = 2;
   // 时间戳（毫秒）
   int64 timestamp = 3;
+}
+
+// FileListRequestData 文件列表请求（key = "file_list_request"）
+message FileListRequestData {
+  // 被控端设备码
+  uint64 target_code = 1;
+  // 被控端密码
+  string target_password = 2;
+  // 目标路径
+  string path = 3;
+  // 时间戳（毫秒）
+  int64 timestamp = 4;
+}
+
+// FileInfo 文件信息
+message FileInfo {
+  // 文件名
+  string name = 1;
+  // 文件路径
+  string path = 2;
+  // 文件大小（字节）
+  int64 size = 3;
+  // 是否为目录
+  bool is_dir = 4;
+  // 修改时间（毫秒时间戳）
+  int64 modify_time = 5;
+  // 文件权限模式（如：0644）
+  int32 mode = 6;
+}
+
+// FileListResponseData 文件列表响应（key = "file_list_response"）
+message FileListResponseData {
+  // 响应码：0=成功，1=路径不存在，2=无权限，3=其他错误
+  int32 code = 1;
+  // 错误信息
+  string message = 2;
+  // 当前路径
+  string current_path = 3;
+  // 文件列表
+  repeated FileInfo files = 4;
+  // 时间戳（毫秒）
+  int64 timestamp = 5;
+}
+
+// FileTransferStartData 文件传输开始（key = "file_transfer_start"）
+message FileTransferStartData {
+  // 传输ID（唯一标识本次传输）
+  string transfer_id = 1;
+  // 传输方向：upload=上传到被控端，download=从被控端下载
+  string direction = 2;
+  // 源文件路径
+  string source_path = 3;
+  // 目标文件路径
+  string target_path = 4;
+  // 文件总大小（字节）  
+  int64 total_size = 5;
+  // 块大小（字节，默认64KB）
+  int32 chunk_size = 6;
+  // 时间戳（毫秒）
+  int64 timestamp = 7;
+}
+
+// FileTransferData 文件传输数据块（key = "file_transfer_data"）
+message FileTransferData {
+  // 传输ID
+  string transfer_id = 1;
+  // 块序号（从0开始）
+  int32 chunk_index = 2;
+  // 是否为最后一块
+  bool is_last = 3;
+  // 数据块内容
+  bytes data = 4;
+  // 数据块实际大小
+  int32 data_size = 5;
+  // 时间戳（毫秒）
+  int64 timestamp = 6;
+}
+
+// FileTransferCompleteData 文件传输完成（key = "file_transfer_complete"）
+message FileTransferCompleteData {
+  // 传输ID
+  string transfer_id = 1;
+  // 响应码：0=成功，1=失败
+  int32 code = 2;
+  // 错误信息（失败时）
+  string message = 3;
+  // 文件MD5校验值（可选）
+  string md5 = 4;
+  // 时间戳（毫秒）
+  int64 timestamp = 5;
+}
+
+// FileTransferCancelData 文件传输取消（key = "file_transfer_cancel"）
+message FileTransferCancelData {
+  // 传输ID
+  string transfer_id = 1;
+  // 取消原因
+  string reason = 2;
+  // 时间戳（毫秒）
+  int64 timestamp = 3;
+}
+
+// FileRenameRequestData 文件重命名请求（key = "file_rename_request"）
+message FileRenameRequestData {
+  // 请求ID
+  string request_id = 1;
+  // 原文件/目录路径
+  string old_path = 2;
+  // 新文件/目录名称（仅名称，不含路径）
+  string new_name = 3;
+  // 时间戳（毫秒）
+  int64 timestamp = 4;
+}
+
+// FileRenameResponseData 文件重命名响应（key = "file_rename_response"）
+message FileRenameResponseData {
+  // 请求ID
+  string request_id = 1;
+  // 响应码：0=成功，1=源文件不存在，2=目标已存在，3=无权限，4=其他错误
+  int32 code = 2;
+  // 错误信息
+  string message = 3;
+  // 新完整路径
+  string new_path = 4;
+  // 时间戳（毫秒）
+  int64 timestamp = 5;
+}
+
+// FileDeleteRequestData 文件删除请求（key = "file_delete_request"）
+message FileDeleteRequestData {
+  // 请求ID
+  string request_id = 1;
+  // 要删除的文件/目录路径
+  string path = 2;
+  // 是否强制删除（目录非空时是否递归删除）
+  bool force = 3;
+  // 时间戳（毫秒）
+  int64 timestamp = 4;
+}
+
+// FileDeleteResponseData 文件删除响应（key = "file_delete_response"）
+message FileDeleteResponseData {
+  // 请求ID
+  string request_id = 1;
+  // 响应码：0=成功，1=文件不存在，2=目录非空，3=无权限，4=其他错误
+  int32 code = 2;
+  // 错误信息
+  string message = 3;
+  // 删除的文件/目录路径
+  string deleted_path = 4;
+  // 时间戳（毫秒）
+  int64 timestamp = 5;
+}
+
+// FileCreateFolderRequestData 创建文件夹请求（key = "file_create_folder_request"）
+message FileCreateFolderRequestData {
+  // 请求ID
+  string request_id = 1;
+  // 父目录路径
+  string parent_path = 2;
+  // 文件夹名称
+  string folder_name = 3;
+  // 文件夹权限模式（如：0755）
+  int32 mode = 4;
+  // 时间戳（毫秒）
+  int64 timestamp = 5;
+}
+
+// FileCreateFolderResponseData 创建文件夹响应（key = "file_create_folder_response"）
+message FileCreateFolderResponseData {
+  // 请求ID
+  string request_id = 1;
+  // 响应码：0=成功，1=父目录不存在，2=已存在，3=无权限，4=其他错误
+  int32 code = 2;
+  // 错误信息
+  string message = 3;
+  // 创建的文件夹完整路径
+  string folder_path = 4;
+  // 时间戳（毫秒）
+  int64 timestamp = 5;
 }
 
 service ChannelService {

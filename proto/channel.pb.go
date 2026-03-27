@@ -953,6 +953,1063 @@ func (x *KeyUpData) GetTimestamp() int64 {
 	return 0
 }
 
+// FileListRequestData 文件列表请求（key = "file_list_request"）
+type FileListRequestData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 被控端设备码
+	TargetCode uint64 `protobuf:"varint,1,opt,name=target_code,json=targetCode,proto3" json:"target_code,omitempty"`
+	// 被控端密码
+	TargetPassword string `protobuf:"bytes,2,opt,name=target_password,json=targetPassword,proto3" json:"target_password,omitempty"`
+	// 目标路径
+	Path string `protobuf:"bytes,3,opt,name=path,proto3" json:"path,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,4,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileListRequestData) Reset() {
+	*x = FileListRequestData{}
+	mi := &file_channel_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileListRequestData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileListRequestData) ProtoMessage() {}
+
+func (x *FileListRequestData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileListRequestData.ProtoReflect.Descriptor instead.
+func (*FileListRequestData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *FileListRequestData) GetTargetCode() uint64 {
+	if x != nil {
+		return x.TargetCode
+	}
+	return 0
+}
+
+func (x *FileListRequestData) GetTargetPassword() string {
+	if x != nil {
+		return x.TargetPassword
+	}
+	return ""
+}
+
+func (x *FileListRequestData) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *FileListRequestData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// FileInfo 文件信息
+type FileInfo struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 文件名
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// 文件路径
+	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	// 文件大小（字节）
+	Size int64 `protobuf:"varint,3,opt,name=size,proto3" json:"size,omitempty"`
+	// 是否为目录
+	IsDir bool `protobuf:"varint,4,opt,name=is_dir,json=isDir,proto3" json:"is_dir,omitempty"`
+	// 修改时间（毫秒时间戳）
+	ModifyTime int64 `protobuf:"varint,5,opt,name=modify_time,json=modifyTime,proto3" json:"modify_time,omitempty"`
+	// 文件权限模式（如：0644）
+	Mode          int32 `protobuf:"varint,6,opt,name=mode,proto3" json:"mode,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileInfo) Reset() {
+	*x = FileInfo{}
+	mi := &file_channel_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileInfo) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileInfo) ProtoMessage() {}
+
+func (x *FileInfo) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileInfo.ProtoReflect.Descriptor instead.
+func (*FileInfo) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *FileInfo) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *FileInfo) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *FileInfo) GetSize() int64 {
+	if x != nil {
+		return x.Size
+	}
+	return 0
+}
+
+func (x *FileInfo) GetIsDir() bool {
+	if x != nil {
+		return x.IsDir
+	}
+	return false
+}
+
+func (x *FileInfo) GetModifyTime() int64 {
+	if x != nil {
+		return x.ModifyTime
+	}
+	return 0
+}
+
+func (x *FileInfo) GetMode() int32 {
+	if x != nil {
+		return x.Mode
+	}
+	return 0
+}
+
+// FileListResponseData 文件列表响应（key = "file_list_response"）
+type FileListResponseData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 响应码：0=成功，1=路径不存在，2=无权限，3=其他错误
+	Code int32 `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
+	// 错误信息
+	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	// 当前路径
+	CurrentPath string `protobuf:"bytes,3,opt,name=current_path,json=currentPath,proto3" json:"current_path,omitempty"`
+	// 文件列表
+	Files []*FileInfo `protobuf:"bytes,4,rep,name=files,proto3" json:"files,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,5,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileListResponseData) Reset() {
+	*x = FileListResponseData{}
+	mi := &file_channel_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileListResponseData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileListResponseData) ProtoMessage() {}
+
+func (x *FileListResponseData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileListResponseData.ProtoReflect.Descriptor instead.
+func (*FileListResponseData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *FileListResponseData) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *FileListResponseData) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *FileListResponseData) GetCurrentPath() string {
+	if x != nil {
+		return x.CurrentPath
+	}
+	return ""
+}
+
+func (x *FileListResponseData) GetFiles() []*FileInfo {
+	if x != nil {
+		return x.Files
+	}
+	return nil
+}
+
+func (x *FileListResponseData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// FileTransferStartData 文件传输开始（key = "file_transfer_start"）
+type FileTransferStartData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 传输ID（唯一标识本次传输）
+	TransferId string `protobuf:"bytes,1,opt,name=transfer_id,json=transferId,proto3" json:"transfer_id,omitempty"`
+	// 传输方向：upload=上传到被控端，download=从被控端下载
+	Direction string `protobuf:"bytes,2,opt,name=direction,proto3" json:"direction,omitempty"`
+	// 源文件路径
+	SourcePath string `protobuf:"bytes,3,opt,name=source_path,json=sourcePath,proto3" json:"source_path,omitempty"`
+	// 目标文件路径
+	TargetPath string `protobuf:"bytes,4,opt,name=target_path,json=targetPath,proto3" json:"target_path,omitempty"`
+	// 文件总大小（字节）
+	TotalSize int64 `protobuf:"varint,5,opt,name=total_size,json=totalSize,proto3" json:"total_size,omitempty"`
+	// 块大小（字节，默认64KB）
+	ChunkSize int32 `protobuf:"varint,6,opt,name=chunk_size,json=chunkSize,proto3" json:"chunk_size,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,7,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileTransferStartData) Reset() {
+	*x = FileTransferStartData{}
+	mi := &file_channel_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileTransferStartData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileTransferStartData) ProtoMessage() {}
+
+func (x *FileTransferStartData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileTransferStartData.ProtoReflect.Descriptor instead.
+func (*FileTransferStartData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *FileTransferStartData) GetTransferId() string {
+	if x != nil {
+		return x.TransferId
+	}
+	return ""
+}
+
+func (x *FileTransferStartData) GetDirection() string {
+	if x != nil {
+		return x.Direction
+	}
+	return ""
+}
+
+func (x *FileTransferStartData) GetSourcePath() string {
+	if x != nil {
+		return x.SourcePath
+	}
+	return ""
+}
+
+func (x *FileTransferStartData) GetTargetPath() string {
+	if x != nil {
+		return x.TargetPath
+	}
+	return ""
+}
+
+func (x *FileTransferStartData) GetTotalSize() int64 {
+	if x != nil {
+		return x.TotalSize
+	}
+	return 0
+}
+
+func (x *FileTransferStartData) GetChunkSize() int32 {
+	if x != nil {
+		return x.ChunkSize
+	}
+	return 0
+}
+
+func (x *FileTransferStartData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// FileTransferData 文件传输数据块（key = "file_transfer_data"）
+type FileTransferData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 传输ID
+	TransferId string `protobuf:"bytes,1,opt,name=transfer_id,json=transferId,proto3" json:"transfer_id,omitempty"`
+	// 块序号（从0开始）
+	ChunkIndex int32 `protobuf:"varint,2,opt,name=chunk_index,json=chunkIndex,proto3" json:"chunk_index,omitempty"`
+	// 是否为最后一块
+	IsLast bool `protobuf:"varint,3,opt,name=is_last,json=isLast,proto3" json:"is_last,omitempty"`
+	// 数据块内容
+	Data []byte `protobuf:"bytes,4,opt,name=data,proto3" json:"data,omitempty"`
+	// 数据块实际大小
+	DataSize int32 `protobuf:"varint,5,opt,name=data_size,json=dataSize,proto3" json:"data_size,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,6,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileTransferData) Reset() {
+	*x = FileTransferData{}
+	mi := &file_channel_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileTransferData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileTransferData) ProtoMessage() {}
+
+func (x *FileTransferData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileTransferData.ProtoReflect.Descriptor instead.
+func (*FileTransferData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *FileTransferData) GetTransferId() string {
+	if x != nil {
+		return x.TransferId
+	}
+	return ""
+}
+
+func (x *FileTransferData) GetChunkIndex() int32 {
+	if x != nil {
+		return x.ChunkIndex
+	}
+	return 0
+}
+
+func (x *FileTransferData) GetIsLast() bool {
+	if x != nil {
+		return x.IsLast
+	}
+	return false
+}
+
+func (x *FileTransferData) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+func (x *FileTransferData) GetDataSize() int32 {
+	if x != nil {
+		return x.DataSize
+	}
+	return 0
+}
+
+func (x *FileTransferData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// FileTransferCompleteData 文件传输完成（key = "file_transfer_complete"）
+type FileTransferCompleteData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 传输ID
+	TransferId string `protobuf:"bytes,1,opt,name=transfer_id,json=transferId,proto3" json:"transfer_id,omitempty"`
+	// 响应码：0=成功，1=失败
+	Code int32 `protobuf:"varint,2,opt,name=code,proto3" json:"code,omitempty"`
+	// 错误信息（失败时）
+	Message string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
+	// 文件MD5校验值（可选）
+	Md5 string `protobuf:"bytes,4,opt,name=md5,proto3" json:"md5,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,5,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileTransferCompleteData) Reset() {
+	*x = FileTransferCompleteData{}
+	mi := &file_channel_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileTransferCompleteData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileTransferCompleteData) ProtoMessage() {}
+
+func (x *FileTransferCompleteData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileTransferCompleteData.ProtoReflect.Descriptor instead.
+func (*FileTransferCompleteData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *FileTransferCompleteData) GetTransferId() string {
+	if x != nil {
+		return x.TransferId
+	}
+	return ""
+}
+
+func (x *FileTransferCompleteData) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *FileTransferCompleteData) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *FileTransferCompleteData) GetMd5() string {
+	if x != nil {
+		return x.Md5
+	}
+	return ""
+}
+
+func (x *FileTransferCompleteData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// FileTransferCancelData 文件传输取消（key = "file_transfer_cancel"）
+type FileTransferCancelData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 传输ID
+	TransferId string `protobuf:"bytes,1,opt,name=transfer_id,json=transferId,proto3" json:"transfer_id,omitempty"`
+	// 取消原因
+	Reason string `protobuf:"bytes,2,opt,name=reason,proto3" json:"reason,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileTransferCancelData) Reset() {
+	*x = FileTransferCancelData{}
+	mi := &file_channel_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileTransferCancelData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileTransferCancelData) ProtoMessage() {}
+
+func (x *FileTransferCancelData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileTransferCancelData.ProtoReflect.Descriptor instead.
+func (*FileTransferCancelData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *FileTransferCancelData) GetTransferId() string {
+	if x != nil {
+		return x.TransferId
+	}
+	return ""
+}
+
+func (x *FileTransferCancelData) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+func (x *FileTransferCancelData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// FileRenameRequestData 文件重命名请求（key = "file_rename_request"）
+type FileRenameRequestData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 请求ID
+	RequestId string `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	// 原文件/目录路径
+	OldPath string `protobuf:"bytes,2,opt,name=old_path,json=oldPath,proto3" json:"old_path,omitempty"`
+	// 新文件/目录名称（仅名称，不含路径）
+	NewName string `protobuf:"bytes,3,opt,name=new_name,json=newName,proto3" json:"new_name,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,4,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileRenameRequestData) Reset() {
+	*x = FileRenameRequestData{}
+	mi := &file_channel_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileRenameRequestData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileRenameRequestData) ProtoMessage() {}
+
+func (x *FileRenameRequestData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileRenameRequestData.ProtoReflect.Descriptor instead.
+func (*FileRenameRequestData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *FileRenameRequestData) GetRequestId() string {
+	if x != nil {
+		return x.RequestId
+	}
+	return ""
+}
+
+func (x *FileRenameRequestData) GetOldPath() string {
+	if x != nil {
+		return x.OldPath
+	}
+	return ""
+}
+
+func (x *FileRenameRequestData) GetNewName() string {
+	if x != nil {
+		return x.NewName
+	}
+	return ""
+}
+
+func (x *FileRenameRequestData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// FileRenameResponseData 文件重命名响应（key = "file_rename_response"）
+type FileRenameResponseData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 请求ID
+	RequestId string `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	// 响应码：0=成功，1=源文件不存在，2=目标已存在，3=无权限，4=其他错误
+	Code int32 `protobuf:"varint,2,opt,name=code,proto3" json:"code,omitempty"`
+	// 错误信息
+	Message string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
+	// 新完整路径
+	NewPath string `protobuf:"bytes,4,opt,name=new_path,json=newPath,proto3" json:"new_path,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,5,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileRenameResponseData) Reset() {
+	*x = FileRenameResponseData{}
+	mi := &file_channel_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileRenameResponseData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileRenameResponseData) ProtoMessage() {}
+
+func (x *FileRenameResponseData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileRenameResponseData.ProtoReflect.Descriptor instead.
+func (*FileRenameResponseData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *FileRenameResponseData) GetRequestId() string {
+	if x != nil {
+		return x.RequestId
+	}
+	return ""
+}
+
+func (x *FileRenameResponseData) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *FileRenameResponseData) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *FileRenameResponseData) GetNewPath() string {
+	if x != nil {
+		return x.NewPath
+	}
+	return ""
+}
+
+func (x *FileRenameResponseData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// FileDeleteRequestData 文件删除请求（key = "file_delete_request"）
+type FileDeleteRequestData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 请求ID
+	RequestId string `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	// 要删除的文件/目录路径
+	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	// 是否强制删除（目录非空时是否递归删除）
+	Force bool `protobuf:"varint,3,opt,name=force,proto3" json:"force,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,4,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileDeleteRequestData) Reset() {
+	*x = FileDeleteRequestData{}
+	mi := &file_channel_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileDeleteRequestData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileDeleteRequestData) ProtoMessage() {}
+
+func (x *FileDeleteRequestData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileDeleteRequestData.ProtoReflect.Descriptor instead.
+func (*FileDeleteRequestData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *FileDeleteRequestData) GetRequestId() string {
+	if x != nil {
+		return x.RequestId
+	}
+	return ""
+}
+
+func (x *FileDeleteRequestData) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *FileDeleteRequestData) GetForce() bool {
+	if x != nil {
+		return x.Force
+	}
+	return false
+}
+
+func (x *FileDeleteRequestData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// FileDeleteResponseData 文件删除响应（key = "file_delete_response"）
+type FileDeleteResponseData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 请求ID
+	RequestId string `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	// 响应码：0=成功，1=文件不存在，2=目录非空，3=无权限，4=其他错误
+	Code int32 `protobuf:"varint,2,opt,name=code,proto3" json:"code,omitempty"`
+	// 错误信息
+	Message string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
+	// 删除的文件/目录路径
+	DeletedPath string `protobuf:"bytes,4,opt,name=deleted_path,json=deletedPath,proto3" json:"deleted_path,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,5,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileDeleteResponseData) Reset() {
+	*x = FileDeleteResponseData{}
+	mi := &file_channel_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileDeleteResponseData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileDeleteResponseData) ProtoMessage() {}
+
+func (x *FileDeleteResponseData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileDeleteResponseData.ProtoReflect.Descriptor instead.
+func (*FileDeleteResponseData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *FileDeleteResponseData) GetRequestId() string {
+	if x != nil {
+		return x.RequestId
+	}
+	return ""
+}
+
+func (x *FileDeleteResponseData) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *FileDeleteResponseData) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *FileDeleteResponseData) GetDeletedPath() string {
+	if x != nil {
+		return x.DeletedPath
+	}
+	return ""
+}
+
+func (x *FileDeleteResponseData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// FileCreateFolderRequestData 创建文件夹请求（key = "file_create_folder_request"）
+type FileCreateFolderRequestData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 请求ID
+	RequestId string `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	// 父目录路径
+	ParentPath string `protobuf:"bytes,2,opt,name=parent_path,json=parentPath,proto3" json:"parent_path,omitempty"`
+	// 文件夹名称
+	FolderName string `protobuf:"bytes,3,opt,name=folder_name,json=folderName,proto3" json:"folder_name,omitempty"`
+	// 文件夹权限模式（如：0755）
+	Mode int32 `protobuf:"varint,4,opt,name=mode,proto3" json:"mode,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,5,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileCreateFolderRequestData) Reset() {
+	*x = FileCreateFolderRequestData{}
+	mi := &file_channel_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileCreateFolderRequestData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileCreateFolderRequestData) ProtoMessage() {}
+
+func (x *FileCreateFolderRequestData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileCreateFolderRequestData.ProtoReflect.Descriptor instead.
+func (*FileCreateFolderRequestData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *FileCreateFolderRequestData) GetRequestId() string {
+	if x != nil {
+		return x.RequestId
+	}
+	return ""
+}
+
+func (x *FileCreateFolderRequestData) GetParentPath() string {
+	if x != nil {
+		return x.ParentPath
+	}
+	return ""
+}
+
+func (x *FileCreateFolderRequestData) GetFolderName() string {
+	if x != nil {
+		return x.FolderName
+	}
+	return ""
+}
+
+func (x *FileCreateFolderRequestData) GetMode() int32 {
+	if x != nil {
+		return x.Mode
+	}
+	return 0
+}
+
+func (x *FileCreateFolderRequestData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
+// FileCreateFolderResponseData 创建文件夹响应（key = "file_create_folder_response"）
+type FileCreateFolderResponseData struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// 请求ID
+	RequestId string `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`
+	// 响应码：0=成功，1=父目录不存在，2=已存在，3=无权限，4=其他错误
+	Code int32 `protobuf:"varint,2,opt,name=code,proto3" json:"code,omitempty"`
+	// 错误信息
+	Message string `protobuf:"bytes,3,opt,name=message,proto3" json:"message,omitempty"`
+	// 创建的文件夹完整路径
+	FolderPath string `protobuf:"bytes,4,opt,name=folder_path,json=folderPath,proto3" json:"folder_path,omitempty"`
+	// 时间戳（毫秒）
+	Timestamp     int64 `protobuf:"varint,5,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FileCreateFolderResponseData) Reset() {
+	*x = FileCreateFolderResponseData{}
+	mi := &file_channel_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FileCreateFolderResponseData) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FileCreateFolderResponseData) ProtoMessage() {}
+
+func (x *FileCreateFolderResponseData) ProtoReflect() protoreflect.Message {
+	mi := &file_channel_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FileCreateFolderResponseData.ProtoReflect.Descriptor instead.
+func (*FileCreateFolderResponseData) Descriptor() ([]byte, []int) {
+	return file_channel_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *FileCreateFolderResponseData) GetRequestId() string {
+	if x != nil {
+		return x.RequestId
+	}
+	return ""
+}
+
+func (x *FileCreateFolderResponseData) GetCode() int32 {
+	if x != nil {
+		return x.Code
+	}
+	return 0
+}
+
+func (x *FileCreateFolderResponseData) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *FileCreateFolderResponseData) GetFolderPath() string {
+	if x != nil {
+		return x.FolderPath
+	}
+	return ""
+}
+
+func (x *FileCreateFolderResponseData) GetTimestamp() int64 {
+	if x != nil {
+		return x.Timestamp
+	}
+	return 0
+}
+
 var File_channel_proto protoreflect.FileDescriptor
 
 const file_channel_proto_rawDesc = "" +
@@ -1026,7 +2083,104 @@ const file_channel_proto_rawDesc = "" +
 	"\tKeyUpData\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x1c\n" +
 	"\tmodifiers\x18\x02 \x03(\tR\tmodifiers\x12\x1c\n" +
-	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp2T\n" +
+	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp\"\x91\x01\n" +
+	"\x13FileListRequestData\x12\x1f\n" +
+	"\vtarget_code\x18\x01 \x01(\x04R\n" +
+	"targetCode\x12'\n" +
+	"\x0ftarget_password\x18\x02 \x01(\tR\x0etargetPassword\x12\x12\n" +
+	"\x04path\x18\x03 \x01(\tR\x04path\x12\x1c\n" +
+	"\ttimestamp\x18\x04 \x01(\x03R\ttimestamp\"\x92\x01\n" +
+	"\bFileInfo\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x12\n" +
+	"\x04path\x18\x02 \x01(\tR\x04path\x12\x12\n" +
+	"\x04size\x18\x03 \x01(\x03R\x04size\x12\x15\n" +
+	"\x06is_dir\x18\x04 \x01(\bR\x05isDir\x12\x1f\n" +
+	"\vmodify_time\x18\x05 \x01(\x03R\n" +
+	"modifyTime\x12\x12\n" +
+	"\x04mode\x18\x06 \x01(\x05R\x04mode\"\xad\x01\n" +
+	"\x14FileListResponseData\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12!\n" +
+	"\fcurrent_path\x18\x03 \x01(\tR\vcurrentPath\x12&\n" +
+	"\x05files\x18\x04 \x03(\v2\x10.godesk.FileInfoR\x05files\x12\x1c\n" +
+	"\ttimestamp\x18\x05 \x01(\x03R\ttimestamp\"\xf4\x01\n" +
+	"\x15FileTransferStartData\x12\x1f\n" +
+	"\vtransfer_id\x18\x01 \x01(\tR\n" +
+	"transferId\x12\x1c\n" +
+	"\tdirection\x18\x02 \x01(\tR\tdirection\x12\x1f\n" +
+	"\vsource_path\x18\x03 \x01(\tR\n" +
+	"sourcePath\x12\x1f\n" +
+	"\vtarget_path\x18\x04 \x01(\tR\n" +
+	"targetPath\x12\x1d\n" +
+	"\n" +
+	"total_size\x18\x05 \x01(\x03R\ttotalSize\x12\x1d\n" +
+	"\n" +
+	"chunk_size\x18\x06 \x01(\x05R\tchunkSize\x12\x1c\n" +
+	"\ttimestamp\x18\a \x01(\x03R\ttimestamp\"\xbc\x01\n" +
+	"\x10FileTransferData\x12\x1f\n" +
+	"\vtransfer_id\x18\x01 \x01(\tR\n" +
+	"transferId\x12\x1f\n" +
+	"\vchunk_index\x18\x02 \x01(\x05R\n" +
+	"chunkIndex\x12\x17\n" +
+	"\ais_last\x18\x03 \x01(\bR\x06isLast\x12\x12\n" +
+	"\x04data\x18\x04 \x01(\fR\x04data\x12\x1b\n" +
+	"\tdata_size\x18\x05 \x01(\x05R\bdataSize\x12\x1c\n" +
+	"\ttimestamp\x18\x06 \x01(\x03R\ttimestamp\"\x99\x01\n" +
+	"\x18FileTransferCompleteData\x12\x1f\n" +
+	"\vtransfer_id\x18\x01 \x01(\tR\n" +
+	"transferId\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x03 \x01(\tR\amessage\x12\x10\n" +
+	"\x03md5\x18\x04 \x01(\tR\x03md5\x12\x1c\n" +
+	"\ttimestamp\x18\x05 \x01(\x03R\ttimestamp\"o\n" +
+	"\x16FileTransferCancelData\x12\x1f\n" +
+	"\vtransfer_id\x18\x01 \x01(\tR\n" +
+	"transferId\x12\x16\n" +
+	"\x06reason\x18\x02 \x01(\tR\x06reason\x12\x1c\n" +
+	"\ttimestamp\x18\x03 \x01(\x03R\ttimestamp\"\x8a\x01\n" +
+	"\x15FileRenameRequestData\x12\x1d\n" +
+	"\n" +
+	"request_id\x18\x01 \x01(\tR\trequestId\x12\x19\n" +
+	"\bold_path\x18\x02 \x01(\tR\aoldPath\x12\x19\n" +
+	"\bnew_name\x18\x03 \x01(\tR\anewName\x12\x1c\n" +
+	"\ttimestamp\x18\x04 \x01(\x03R\ttimestamp\"\x9e\x01\n" +
+	"\x16FileRenameResponseData\x12\x1d\n" +
+	"\n" +
+	"request_id\x18\x01 \x01(\tR\trequestId\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x03 \x01(\tR\amessage\x12\x19\n" +
+	"\bnew_path\x18\x04 \x01(\tR\anewPath\x12\x1c\n" +
+	"\ttimestamp\x18\x05 \x01(\x03R\ttimestamp\"~\n" +
+	"\x15FileDeleteRequestData\x12\x1d\n" +
+	"\n" +
+	"request_id\x18\x01 \x01(\tR\trequestId\x12\x12\n" +
+	"\x04path\x18\x02 \x01(\tR\x04path\x12\x14\n" +
+	"\x05force\x18\x03 \x01(\bR\x05force\x12\x1c\n" +
+	"\ttimestamp\x18\x04 \x01(\x03R\ttimestamp\"\xa6\x01\n" +
+	"\x16FileDeleteResponseData\x12\x1d\n" +
+	"\n" +
+	"request_id\x18\x01 \x01(\tR\trequestId\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x03 \x01(\tR\amessage\x12!\n" +
+	"\fdeleted_path\x18\x04 \x01(\tR\vdeletedPath\x12\x1c\n" +
+	"\ttimestamp\x18\x05 \x01(\x03R\ttimestamp\"\xb0\x01\n" +
+	"\x1bFileCreateFolderRequestData\x12\x1d\n" +
+	"\n" +
+	"request_id\x18\x01 \x01(\tR\trequestId\x12\x1f\n" +
+	"\vparent_path\x18\x02 \x01(\tR\n" +
+	"parentPath\x12\x1f\n" +
+	"\vfolder_name\x18\x03 \x01(\tR\n" +
+	"folderName\x12\x12\n" +
+	"\x04mode\x18\x04 \x01(\x05R\x04mode\x12\x1c\n" +
+	"\ttimestamp\x18\x05 \x01(\x03R\ttimestamp\"\xaa\x01\n" +
+	"\x1cFileCreateFolderResponseData\x12\x1d\n" +
+	"\n" +
+	"request_id\x18\x01 \x01(\tR\trequestId\x12\x12\n" +
+	"\x04code\x18\x02 \x01(\x05R\x04code\x12\x18\n" +
+	"\amessage\x18\x03 \x01(\tR\amessage\x12\x1f\n" +
+	"\vfolder_path\x18\x04 \x01(\tR\n" +
+	"folderPath\x12\x1c\n" +
+	"\ttimestamp\x18\x05 \x01(\x03R\ttimestamp2T\n" +
 	"\x0eChannelService\x12B\n" +
 	"\n" +
 	"DataStream\x12\x16.godesk.ChannelRequest\x1a\x16.godesk.ChannelRequest\"\x00(\x010\x01B\vZ\t./;godeskb\x06proto3"
@@ -1043,31 +2197,45 @@ func file_channel_proto_rawDescGZIP() []byte {
 	return file_channel_proto_rawDescData
 }
 
-var file_channel_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_channel_proto_msgTypes = make([]protoimpl.MessageInfo, 27)
 var file_channel_proto_goTypes = []any{
-	(*ChannelRequest)(nil),             // 0: godesk.ChannelRequest
-	(*RegisterData)(nil),               // 1: godesk.RegisterData
-	(*HeartbeatData)(nil),              // 2: godesk.HeartbeatData
-	(*ControlStartedRequestData)(nil),  // 3: godesk.ControlStartedRequestData
-	(*ControlStartedResponseData)(nil), // 4: godesk.ControlStartedResponseData
-	(*ControlEndedRequestData)(nil),    // 5: godesk.ControlEndedRequestData
-	(*ControlEndedResponseData)(nil),   // 6: godesk.ControlEndedResponseData
-	(*ScreenStreamData)(nil),           // 7: godesk.ScreenStreamData
-	(*MouseMoveData)(nil),              // 8: godesk.MouseMoveData
-	(*MouseClickData)(nil),             // 9: godesk.MouseClickData
-	(*MouseScrollData)(nil),            // 10: godesk.MouseScrollData
-	(*KeyTapData)(nil),                 // 11: godesk.KeyTapData
-	(*KeyDownData)(nil),                // 12: godesk.KeyDownData
-	(*KeyUpData)(nil),                  // 13: godesk.KeyUpData
+	(*ChannelRequest)(nil),               // 0: godesk.ChannelRequest
+	(*RegisterData)(nil),                 // 1: godesk.RegisterData
+	(*HeartbeatData)(nil),                // 2: godesk.HeartbeatData
+	(*ControlStartedRequestData)(nil),    // 3: godesk.ControlStartedRequestData
+	(*ControlStartedResponseData)(nil),   // 4: godesk.ControlStartedResponseData
+	(*ControlEndedRequestData)(nil),      // 5: godesk.ControlEndedRequestData
+	(*ControlEndedResponseData)(nil),     // 6: godesk.ControlEndedResponseData
+	(*ScreenStreamData)(nil),             // 7: godesk.ScreenStreamData
+	(*MouseMoveData)(nil),                // 8: godesk.MouseMoveData
+	(*MouseClickData)(nil),               // 9: godesk.MouseClickData
+	(*MouseScrollData)(nil),              // 10: godesk.MouseScrollData
+	(*KeyTapData)(nil),                   // 11: godesk.KeyTapData
+	(*KeyDownData)(nil),                  // 12: godesk.KeyDownData
+	(*KeyUpData)(nil),                    // 13: godesk.KeyUpData
+	(*FileListRequestData)(nil),          // 14: godesk.FileListRequestData
+	(*FileInfo)(nil),                     // 15: godesk.FileInfo
+	(*FileListResponseData)(nil),         // 16: godesk.FileListResponseData
+	(*FileTransferStartData)(nil),        // 17: godesk.FileTransferStartData
+	(*FileTransferData)(nil),             // 18: godesk.FileTransferData
+	(*FileTransferCompleteData)(nil),     // 19: godesk.FileTransferCompleteData
+	(*FileTransferCancelData)(nil),       // 20: godesk.FileTransferCancelData
+	(*FileRenameRequestData)(nil),        // 21: godesk.FileRenameRequestData
+	(*FileRenameResponseData)(nil),       // 22: godesk.FileRenameResponseData
+	(*FileDeleteRequestData)(nil),        // 23: godesk.FileDeleteRequestData
+	(*FileDeleteResponseData)(nil),       // 24: godesk.FileDeleteResponseData
+	(*FileCreateFolderRequestData)(nil),  // 25: godesk.FileCreateFolderRequestData
+	(*FileCreateFolderResponseData)(nil), // 26: godesk.FileCreateFolderResponseData
 }
 var file_channel_proto_depIdxs = []int32{
-	0, // 0: godesk.ChannelService.DataStream:input_type -> godesk.ChannelRequest
-	0, // 1: godesk.ChannelService.DataStream:output_type -> godesk.ChannelRequest
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	15, // 0: godesk.FileListResponseData.files:type_name -> godesk.FileInfo
+	0,  // 1: godesk.ChannelService.DataStream:input_type -> godesk.ChannelRequest
+	0,  // 2: godesk.ChannelService.DataStream:output_type -> godesk.ChannelRequest
+	2,  // [2:3] is the sub-list for method output_type
+	1,  // [1:2] is the sub-list for method input_type
+	1,  // [1:1] is the sub-list for extension type_name
+	1,  // [1:1] is the sub-list for extension extendee
+	0,  // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_channel_proto_init() }
@@ -1081,7 +2249,7 @@ func file_channel_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_channel_proto_rawDesc), len(file_channel_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   27,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
