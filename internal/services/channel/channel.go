@@ -169,6 +169,10 @@ func (s *Service) handleRequest(req *pb.ChannelRequest) {
 		s.handleKeyDown(req)
 	case "key_up":
 		s.handleKeyUp(req)
+	case "file_list_request":
+		s.handleFileListRequest(req)
+	case "file_list_response":
+		s.handleFileListResponse(req)
 	default:
 		logger.Warn("[handle] unknown key", zap.String("key", req.Key))
 	}
@@ -567,4 +571,75 @@ func (s *Service) HandleRequest(req *pb.ChannelRequest) {
 // RegisterDeviceForTest 注册设备用于测试
 func RegisterDeviceForTest(uuid string, code uint64, os, deviceName string, stream pb.ChannelService_DataStreamServer) {
 	deviceMgr.RegisterDevice(uuid, code, os, deviceName, stream)
+}
+
+// handleFileListRequest 处理文件列表请求（控制端 -> 服务器 -> 被控端）
+func (s *Service) handleFileListRequest(req *pb.ChannelRequest) {
+	var data pb.FileListRequestData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[file] list request unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[file] list request",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.Uint64("target_code", data.TargetCode),
+		zap.String("path", data.Path))
+
+	// 如果没有指定目标客户端，则根据 target_code 查找
+	targetUUID := req.TargetClientUuid
+	if targetUUID == "" && data.TargetCode != 0 {
+		if device, ok := deviceMgr.GetDeviceByCode(data.TargetCode); ok {
+			targetUUID = device.UUID
+		}
+	}
+
+	if targetUUID == "" {
+		logger.Error("[file] list request target not found",
+			zap.Uint64("target_code", data.TargetCode))
+		// 发送错误响应给控制端
+		s.sendResponse(req.SendClientUuid, "file_list_response", &pb.FileListResponseData{
+			Code:      3,
+			Message:   "target device not found or offline",
+			Timestamp: time.Now().UnixMilli(),
+		})
+		return
+	}
+
+	// 转发给被控端
+	forwardReq := &pb.ChannelRequest{
+		SendClientUuid:   req.SendClientUuid,
+		TargetClientUuid: targetUUID,
+		Key:              "file_list_request",
+		Data:             req.Data,
+	}
+	if err := s.sendTo(forwardReq, targetUUID); err != nil {
+		logger.Error("[file] list request forward error", zap.Error(err))
+	}
+}
+
+// handleFileListResponse 处理文件列表响应（被控端 -> 服务器 -> 控制端）
+func (s *Service) handleFileListResponse(req *pb.ChannelRequest) {
+	var data pb.FileListResponseData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[file] list response unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[file] list response",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.Int32("code", data.Code),
+		zap.Int("file_count", len(data.Files)))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[file] list response target_client_uuid is empty")
+		return
+	}
+
+	// 转发给控制端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[file] list response forward error", zap.Error(err))
+	}
 }
