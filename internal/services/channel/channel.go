@@ -173,6 +173,14 @@ func (s *Service) handleRequest(req *pb.ChannelRequest) {
 		s.handleFileListRequest(req)
 	case "file_list_response":
 		s.handleFileListResponse(req)
+	case "file_transfer_start":
+		s.handleFileTransferStart(req)
+	case "file_transfer_data":
+		s.handleFileTransferData(req)
+	case "file_transfer_complete":
+		s.handleFileTransferComplete(req)
+	case "file_transfer_cancel":
+		s.handleFileTransferCancel(req)
 	default:
 		logger.Warn("[handle] unknown key", zap.String("key", req.Key))
 	}
@@ -641,5 +649,114 @@ func (s *Service) handleFileListResponse(req *pb.ChannelRequest) {
 	// 转发给控制端
 	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
 		logger.Error("[file] list response forward error", zap.Error(err))
+	}
+}
+
+// handleFileTransferStart 处理文件传输开始（双向）
+func (s *Service) handleFileTransferStart(req *pb.ChannelRequest) {
+	var data pb.FileTransferStartData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[file] transfer start unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[file] transfer start",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.String("transfer_id", data.TransferId),
+		zap.String("direction", data.Direction),
+		zap.String("source", data.SourcePath),
+		zap.String("target", data.TargetPath),
+		zap.Int64("total_size", data.TotalSize))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[file] transfer start target_client_uuid is empty")
+		return
+	}
+
+	// 转发给目标端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[file] transfer start forward error", zap.Error(err))
+	}
+}
+
+// handleFileTransferData 处理文件传输数据块（双向）
+func (s *Service) handleFileTransferData(req *pb.ChannelRequest) {
+	var data pb.FileTransferData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[file] transfer data unmarshal error", zap.Error(err))
+		return
+	}
+
+	// 只在第一块和最后一块打印日志，避免日志过多
+	if data.ChunkIndex == 0 || data.IsLast {
+		logger.Info("[file] transfer data",
+			zap.String("from", req.SendClientUuid),
+			zap.String("to", req.TargetClientUuid),
+			zap.String("transfer_id", data.TransferId),
+			zap.Int32("chunk_index", data.ChunkIndex),
+			zap.Bool("is_last", data.IsLast),
+			zap.Int("data_size", len(data.Data)))
+	}
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[file] transfer data target_client_uuid is empty")
+		return
+	}
+
+	// 转发给目标端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[file] transfer data forward error", zap.Error(err))
+	}
+}
+
+// handleFileTransferComplete 处理文件传输完成（双向）
+func (s *Service) handleFileTransferComplete(req *pb.ChannelRequest) {
+	var data pb.FileTransferCompleteData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[file] transfer complete unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[file] transfer complete",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.String("transfer_id", data.TransferId),
+		zap.Int32("code", data.Code),
+		zap.String("message", data.Message))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[file] transfer complete target_client_uuid is empty")
+		return
+	}
+
+	// 转发给目标端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[file] transfer complete forward error", zap.Error(err))
+	}
+}
+
+// handleFileTransferCancel 处理文件传输取消（双向）
+func (s *Service) handleFileTransferCancel(req *pb.ChannelRequest) {
+	var data pb.FileTransferCancelData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[file] transfer cancel unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[file] transfer cancel",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.String("transfer_id", data.TransferId),
+		zap.String("reason", data.Reason))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[file] transfer cancel target_client_uuid is empty")
+		return
+	}
+
+	// 转发给目标端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[file] transfer cancel forward error", zap.Error(err))
 	}
 }
