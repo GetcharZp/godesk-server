@@ -181,6 +181,10 @@ func (s *Service) handleRequest(req *pb.ChannelRequest) {
 		s.handleFileTransferComplete(req)
 	case "file_transfer_cancel":
 		s.handleFileTransferCancel(req)
+	case "file_rename_request":
+		s.handleFileRenameRequest(req)
+	case "file_rename_response":
+		s.handleFileRenameResponse(req)
 	default:
 		logger.Warn("[handle] unknown key", zap.String("key", req.Key))
 	}
@@ -758,5 +762,64 @@ func (s *Service) handleFileTransferCancel(req *pb.ChannelRequest) {
 	// 转发给目标端
 	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
 		logger.Error("[file] transfer cancel forward error", zap.Error(err))
+	}
+}
+
+// handleFileRenameRequest 处理文件重命名请求（控制端 -> 服务器 -> 被控端）
+func (s *Service) handleFileRenameRequest(req *pb.ChannelRequest) {
+	var data pb.FileRenameRequestData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[file] rename request unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[file] rename request",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.String("request_id", data.RequestId),
+		zap.String("old_path", data.OldPath),
+		zap.String("new_name", data.NewName))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[file] rename request target_client_uuid is empty")
+		// 发送错误响应给控制端
+		s.sendResponse(req.SendClientUuid, "file_rename_response", &pb.FileRenameResponseData{
+			RequestId: data.RequestId,
+			Code:      4,
+			Message:   "target device not found",
+			Timestamp: time.Now().UnixMilli(),
+		})
+		return
+	}
+
+	// 转发给被控端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[file] rename request forward error", zap.Error(err))
+	}
+}
+
+// handleFileRenameResponse 处理文件重命名响应（被控端 -> 服务器 -> 控制端）
+func (s *Service) handleFileRenameResponse(req *pb.ChannelRequest) {
+	var data pb.FileRenameResponseData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[file] rename response unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[file] rename response",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.String("request_id", data.RequestId),
+		zap.Int32("code", data.Code),
+		zap.String("new_path", data.NewPath))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[file] rename response target_client_uuid is empty")
+		return
+	}
+
+	// 转发给控制端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[file] rename response forward error", zap.Error(err))
 	}
 }
