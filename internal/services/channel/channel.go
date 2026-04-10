@@ -185,6 +185,10 @@ func (s *Service) handleRequest(req *pb.ChannelRequest) {
 		s.handleFileRenameRequest(req)
 	case "file_rename_response":
 		s.handleFileRenameResponse(req)
+	case "file_delete_request":
+		s.handleFileDeleteRequest(req)
+	case "file_delete_response":
+		s.handleFileDeleteResponse(req)
 	default:
 		logger.Warn("[handle] unknown key", zap.String("key", req.Key))
 	}
@@ -821,5 +825,66 @@ func (s *Service) handleFileRenameResponse(req *pb.ChannelRequest) {
 	// 转发给控制端
 	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
 		logger.Error("[file] rename response forward error", zap.Error(err))
+	}
+}
+
+// ==================== 文件删除处理 ====================
+
+// handleFileDeleteRequest 处理文件删除请求（控制端 -> 服务器 -> 被控端）
+func (s *Service) handleFileDeleteRequest(req *pb.ChannelRequest) {
+	var data pb.FileDeleteRequestData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[file] delete request unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[file] delete request",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.String("request_id", data.RequestId),
+		zap.String("path", data.Path),
+		zap.Bool("force", data.Force))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[file] delete request target_client_uuid is empty")
+		// 发送错误响应给控制端
+		s.sendResponse(req.SendClientUuid, "file_delete_response", &pb.FileDeleteResponseData{
+			RequestId: data.RequestId,
+			Code:      4,
+			Message:   "target device not found",
+			Timestamp: time.Now().UnixMilli(),
+		})
+		return
+	}
+
+	// 转发给被控端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[file] delete request forward error", zap.Error(err))
+	}
+}
+
+// handleFileDeleteResponse 处理文件删除响应（被控端 -> 服务器 -> 控制端）
+func (s *Service) handleFileDeleteResponse(req *pb.ChannelRequest) {
+	var data pb.FileDeleteResponseData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[file] delete response unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[file] delete response",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.String("request_id", data.RequestId),
+		zap.Int32("code", data.Code),
+		zap.String("deleted_path", data.DeletedPath))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[file] delete response target_client_uuid is empty")
+		return
+	}
+
+	// 转发给控制端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[file] delete response forward error", zap.Error(err))
 	}
 }
