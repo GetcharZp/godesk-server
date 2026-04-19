@@ -189,6 +189,10 @@ func (s *Service) handleRequest(req *pb.ChannelRequest) {
 		s.handleFileDeleteRequest(req)
 	case "file_delete_response":
 		s.handleFileDeleteResponse(req)
+	case "file_create_folder_request":
+		s.handleFileCreateFolderRequest(req)
+	case "file_create_folder_response":
+		s.handleFileCreateFolderResponse(req)
 	default:
 		logger.Warn("[handle] unknown key", zap.String("key", req.Key))
 	}
@@ -886,5 +890,65 @@ func (s *Service) handleFileDeleteResponse(req *pb.ChannelRequest) {
 	// 转发给控制端
 	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
 		logger.Error("[file] delete response forward error", zap.Error(err))
+	}
+}
+
+// handleFileCreateFolderRequest 处理创建文件夹请求（控制端 -> 服务器 -> 被控端）
+func (s *Service) handleFileCreateFolderRequest(req *pb.ChannelRequest) {
+	var data pb.FileCreateFolderRequestData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[file] create folder request unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[file] create folder request",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.String("request_id", data.RequestId),
+		zap.String("parent_path", data.ParentPath),
+		zap.String("folder_name", data.FolderName),
+		zap.Int32("mode", data.Mode))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[file] create folder request target_client_uuid is empty")
+		// 发送错误响应给控制端
+		s.sendResponse(req.SendClientUuid, "file_create_folder_response", &pb.FileCreateFolderResponseData{
+			RequestId: data.RequestId,
+			Code:      4,
+			Message:   "target device not found",
+			Timestamp: time.Now().UnixMilli(),
+		})
+		return
+	}
+
+	// 转发给被控端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[file] create folder request forward error", zap.Error(err))
+	}
+}
+
+// handleFileCreateFolderResponse 处理创建文件夹响应（被控端 -> 服务器 -> 控制端）
+func (s *Service) handleFileCreateFolderResponse(req *pb.ChannelRequest) {
+	var data pb.FileCreateFolderResponseData
+	if err := json.Unmarshal(req.Data, &data); err != nil {
+		logger.Error("[file] create folder response unmarshal error", zap.Error(err))
+		return
+	}
+
+	logger.Info("[file] create folder response",
+		zap.String("from", req.SendClientUuid),
+		zap.String("to", req.TargetClientUuid),
+		zap.String("request_id", data.RequestId),
+		zap.Int32("code", data.Code),
+		zap.String("folder_path", data.FolderPath))
+
+	if req.TargetClientUuid == "" {
+		logger.Error("[file] create folder response target_client_uuid is empty")
+		return
+	}
+
+	// 转发给控制端
+	if err := s.sendTo(req, req.TargetClientUuid); err != nil {
+		logger.Error("[file] create folder response forward error", zap.Error(err))
 	}
 }
